@@ -12,6 +12,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
 public class GUI implements ActionListener {
@@ -30,6 +32,8 @@ public class GUI implements ActionListener {
     private JPanel errorPanel;
     private JButton openFileButton;
     private JButton exitButton;
+    private JTextArea textArea;
+    private JScrollPane scrollPane;
 
     public GUI(){
         frame = new JFrame();
@@ -51,7 +55,7 @@ public class GUI implements ActionListener {
         errorPanel = new JPanel();
 
         
-        // Set border for each panels
+        // Setting borders for each panel
         topButtonPanel.setBackground(Color.gray);
         topButtonPanel.setBounds(20, 20, 1325,50);
 
@@ -69,15 +73,26 @@ public class GUI implements ActionListener {
         exitButton = new JButton("Exit");
         exitButton.addActionListener(this);
         exitButton.setBounds(1235, 30, 100, 30);
+
+        // Display Text Document on textPanel
+        textArea = new JTextArea();
+        textArea.setEditable(true);
+        scrollPane = new JScrollPane(textArea);
         
+        textArea.setText(this.textDocument);
+        scrollPane.setBounds(30, 100, 800, 910);
+
+        // Adding panels and buttons to frame
+        frame.getContentPane().add(scrollPane); 
         frame.getContentPane().add(openFileButton);
         frame.getContentPane().add(exitButton);
         frame.add(topButtonPanel);
         frame.add(textPanel);
         frame.add(errorPanel);
-        
+
         frame.setTitle("GUI");    
         frame.setVisible(true);
+
     }
 
     
@@ -86,18 +101,23 @@ public class GUI implements ActionListener {
             JFileChooser fileChooser = new JFileChooser();
             int option = fileChooser.showOpenDialog(frame); 
             File file = fileChooser.getSelectedFile();
+            StringBuilder fileContent = new StringBuilder();
+
             try {
                 // Read the file
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    with open( reader)
-                    textDocument.append(line)   // You can change this to display in a GUI component
+                    fileContent.append(line).append("\n");   // You can change this to display in a GUI component
                 }
                 reader.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+
+            this.textDocument = fileContent.toString();
+            textArea.setText(this.textDocument);
+            scrollPane.setBounds(30, 100, 800, 910);
         }
         if(e.getSource() == exitButton){
             System.exit(0);
