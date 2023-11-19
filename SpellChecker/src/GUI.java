@@ -35,6 +35,7 @@ public class GUI implements ActionListener {
     private JPanel errorPanel;
     private JButton openFileButton;
     private JButton saveFileButton;
+    private JButton helpButton;
     private JButton exitButton;
     private JTextArea textArea;
     private JScrollPane scrollPane;
@@ -78,6 +79,10 @@ public class GUI implements ActionListener {
         saveFileButton.addActionListener(this);
         saveFileButton.setBounds(140, 30, 100, 30);
 
+        helpButton = new JButton("Help");
+        helpButton.addActionListener(this);
+        helpButton.setBounds(1125, 30, 100, 30);
+
         exitButton = new JButton("Exit");
         exitButton.addActionListener(this);
         exitButton.setBounds(1235, 30, 100, 30);
@@ -94,6 +99,7 @@ public class GUI implements ActionListener {
         frame.getContentPane().add(scrollPane); 
         frame.getContentPane().add(openFileButton);
         frame.getContentPane().add(saveFileButton);
+        frame.getContentPane().add(helpButton);
         frame.getContentPane().add(exitButton);
         frame.add(topButtonPanel);
         frame.add(textPanel);
