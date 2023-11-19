@@ -3,8 +3,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -31,6 +34,7 @@ public class GUI implements ActionListener {
     private JPanel textPanel;
     private JPanel errorPanel;
     private JButton openFileButton;
+    private JButton saveFileButton;
     private JButton exitButton;
     private JTextArea textArea;
     private JScrollPane scrollPane;
@@ -70,6 +74,10 @@ public class GUI implements ActionListener {
         openFileButton.addActionListener(this);
         openFileButton.setBounds(30, 30, 100, 30);
 
+        saveFileButton = new JButton("Save File");
+        saveFileButton.addActionListener(this);
+        saveFileButton.setBounds(140, 30, 100, 30);
+
         exitButton = new JButton("Exit");
         exitButton.addActionListener(this);
         exitButton.setBounds(1235, 30, 100, 30);
@@ -85,6 +93,7 @@ public class GUI implements ActionListener {
         // Adding panels and buttons to frame
         frame.getContentPane().add(scrollPane); 
         frame.getContentPane().add(openFileButton);
+        frame.getContentPane().add(saveFileButton);
         frame.getContentPane().add(exitButton);
         frame.add(topButtonPanel);
         frame.add(textPanel);
@@ -119,10 +128,36 @@ public class GUI implements ActionListener {
             textArea.setText(this.textDocument);
             scrollPane.setBounds(30, 100, 800, 910);
         }
-        if(e.getSource() == exitButton){
-            System.exit(0);
+
+        if(e.getSource() == saveFileButton){
+         //   String text = textArea.getText();
+            JFileChooser saveAs = new JFileChooser();
+            int option = saveAs.showSaveDialog(frame);
+                        
+            File fileName = new File(saveAs.getSelectedFile() + ".txt");
+            BufferedWriter outFile = null;
+            try {
+            outFile = new BufferedWriter(new FileWriter(fileName));
+            textArea.write(outFile);   // *** here: ***
+            } 
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            finally {
+                if (outFile != null) {
+                   try {
+                      outFile.close();
+                   } 
+                   catch (IOException ez) {
+                    //left blank intentionally
+                   }
+                }
+            }
         }
         
+        if(e.getSource() == exitButton){
+            System.exit(0);
+        }   
     }
     
     /** 
