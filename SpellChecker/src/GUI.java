@@ -51,10 +51,10 @@ public class GUI implements ActionListener {
         topButtonPanel.setBounds(20, 20, 1325,50);
         
         textPanel.setBackground(Color.blue);
-        textPanel.setBounds(20, 90, 820, 950);
+        textPanel.setBounds(20, 90, 820, 930);
         
         errorPanel.setBackground(Color.red);
-        errorPanel.setBounds(860, 90, 485, 950);
+        errorPanel.setBounds(860, 90, 485, 930);
         
         
         frame.add(topButtonPanel);
