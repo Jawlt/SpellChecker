@@ -130,7 +130,6 @@ public class GUI implements ActionListener {
         }
 
         if(e.getSource() == saveFileButton){
-         //   String text = textArea.getText();
             JFileChooser saveAs = new JFileChooser();
             int option = saveAs.showSaveDialog(frame);
                         
@@ -154,7 +153,7 @@ public class GUI implements ActionListener {
                 }
             }
         }
-        
+
         if(e.getSource() == exitButton){
             System.exit(0);
         }   
