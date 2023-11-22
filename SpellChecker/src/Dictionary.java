@@ -1,3 +1,6 @@
+/**
+ * Purpose of this class is to represent the dictionaries for the SpellChecker
+ */
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
