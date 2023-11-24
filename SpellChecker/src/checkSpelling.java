@@ -1,21 +1,35 @@
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Hashtable;
-import java.util.Scanner;
 
 public class checkSpelling {
 
     private String word;
     public Hashtable<String, Boolean>dictionary;
-    public String correction;
 
     public void spellChecker(String w, Hashtable<String, Boolean>dict){
         this.word = w;
         this.dictionary = dict;
-        this.correction = "";
+    }
+    public static String findCorrections(String word, Hashtable<String, Boolean>dictionary) {
+        if(!(inDictionary(word, dictionary))){
+            String sub = substitution(word, dictionary);
+            String omi = omission(word, dictionary);
+            String ins = insertion(word, dictionary);
+            String rev = reversal(word, dictionary);
+            if(sub!="none"){
+                return sub;
+            }
+            else if(omi!="none"){
+                return omi;
+            }
+            else if(ins!="none"){
+                return ins;
+            }
+            else if(rev!="none"){
+                return rev;
+            }
+        }
+        return "none";
     }
     
     private static boolean inDictionary(String word, Hashtable<String, Boolean> dictionary){
@@ -27,7 +41,7 @@ public class checkSpelling {
         }
     }
     
-    static String correctSpellingSubstitution(String word, Hashtable<String, Boolean> dictionary) {
+    static String substitution(String word, Hashtable<String, Boolean> dictionary) {
         char alphabet[]= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; // create alphabet array
         char[] arr_word = word.toCharArray(); 
         for(int k=0;k<arr_word.length;k++){
@@ -41,10 +55,10 @@ public class checkSpelling {
                 }
             }
         }
-        return "no words found"; 
+        return "none"; 
     }
 
-    static String correctSpellingWithOmission(String word, Hashtable<String, Boolean> dictionary) {
+    static String omission(String word, Hashtable<String, Boolean> dictionary) {
         char[] arr_word = word.toCharArray();
         for(int k=0;k<arr_word.length;k++){ 
             char[] edited_arr_word = new char[arr_word.length-1]; 
@@ -59,11 +73,10 @@ public class checkSpelling {
                 return str_word;
             }
         }
-        return "no words found"; 
+        return "none"; 
     }
 
-    static ArrayList<String> correctSpellingWithInsertion(String word, Hashtable<String, Boolean> dictionary) {
-        ArrayList<String> arrList = new ArrayList<String>();
+    static String insertion(String word, Hashtable<String, Boolean> dictionary) {
         char alphabet[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
         char[] arr_word = word.toCharArray();
         for (int i = 0; i < arr_word.length + 1; i++) {
@@ -78,14 +91,14 @@ public class checkSpelling {
                 }
                 String str_word = String.valueOf(insert_arr_word).trim().toLowerCase();
                 if (dictionary.containsKey(str_word)) {
-                    arrList.add(str_word);
+                    return str_word;
                 }
             }
         }
-        return arrList;
+        return "none";
     }
 
-    static String correctSpellingWithReversal(String word, Hashtable<String, Boolean> dictionary) {
+    static String reversal(String word, Hashtable<String, Boolean> dictionary) {
         char[] arr_word = word.toCharArray();
         for(int i=0;i<((arr_word.length)-1);i++){ 
             char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 
@@ -101,8 +114,9 @@ public class checkSpelling {
             }
 
         }
-        return "no words found";
+        return "none";
     }
+    
     
 
 }
