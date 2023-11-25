@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -69,16 +70,15 @@ public class GUI extends Dictionary implements ActionListener {
         this.exitButton = new JButton("Exit");
         
         // error buttons
-        originalWord = getIncorrectWord();
-        this.incorrectWord = new JButton(originalWord);
         correctWord = getCorrectWord();
         this.autoCorrectButton = new JButton("AutoCorrect: " + correctWord);
         this.addToDictionary = new JButton("Add to Dictionary");
         this.ignoreError = new JButton("Ignore Error");
         this.textPane = new JTextPane();
         this.scrollPane = new JScrollPane(textPane);
-        
-        System.out.println(originalWord);
+
+
+        System.out.println("bogus");
         // // Get the StyledDocument of the JTextPane
         // StyledDocument doc = textPane.getStyledDocument();
         
@@ -122,9 +122,27 @@ public class GUI extends Dictionary implements ActionListener {
             scrollPane.setBounds(30, 100, 800, 910);
             setTextDoc(textDocument);
 
+            originalWord = getIncorrectWord();
+            System.out.println("word: " + originalWord);
+            this.incorrectWord = new JButton(originalWord);
+
             // display Error Buttons
             incorrectWord.addActionListener(this);
-            incorrectWord.setBounds(870, 100, 465, 30);
+            incorrectWord.setBounds(870, 100, 155, 30);
+            
+            autoCorrectButton.addActionListener(this);
+            autoCorrectButton.setBounds(870, 140, 155, 30);
+
+            addToDictionary.addActionListener(this);
+            addToDictionary.setBounds(870, 170, 155, 30);
+
+            ignoreError.addActionListener(this);
+            ignoreError.setBounds(870, 200, 155, 30);
+
+            frame.getContentPane().add(incorrectWord);
+            frame.getContentPane().add(autoCorrectButton);
+            frame.getContentPane().add(addToDictionary);
+            frame.getContentPane().add(ignoreError);
             
         }
 
@@ -231,8 +249,6 @@ public class GUI extends Dictionary implements ActionListener {
 ;
         testing.exitButton.addActionListener(testing);
         testing.exitButton.setBounds(1235, 30, 100, 30);
-
-        
         
         // Display Text Document on textPanel
         testing.textPane.setEditable(true);
@@ -246,16 +262,14 @@ public class GUI extends Dictionary implements ActionListener {
         testing.frame.getContentPane().add(testing.saveFileButton);
         testing.frame.getContentPane().add(testing.helpButton);
         testing.frame.getContentPane().add(testing.exitButton);
+        
         testing.frame.add(testing.topButtonPanel);
         testing.frame.add(testing.textPanel);
         testing.frame.add(testing.errorPanel);
 
+
         testing.frame.setTitle("GUI");    
         testing.frame.setVisible(true);
 
-        
-    }
-
-
-    
+    } 
 }

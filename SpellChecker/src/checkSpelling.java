@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Map.Entry;
 
 public class checkSpelling {
 
@@ -27,13 +28,13 @@ public class checkSpelling {
     }
 
     public String getIncorrectWord() {
-        String[] textWords = textDocument.split(" ");
+        System.out.print(textDocument);
+        String[] textWords = textDocument.split("\\s+");
         for (String textWord: textWords) {
-            if (!this.dictionary.containsKey(textWord)){
-                if (findCorrections(textWord) != "none") {
-                    this.originalWord = textWord;
-                    this.correctedWord = findCorrections(textWord);
-                }
+            if (!this.dictionary.containsKey(textWord)){ 
+                this.originalWord = textWord;
+                return this.originalWord;
+            
             }
         }
         return this.originalWord;    
@@ -45,10 +46,10 @@ public class checkSpelling {
     
     public String findCorrections(String focusedWord) {
         if(!(this.dictionary.containsKey(focusedWord))){
-            String sub = substitution(focusedWord, dictionary);
-            String omi = omission(focusedWord, dictionary);
-            String ins = insertion(focusedWord, dictionary);
-            String rev = reversal(focusedWord, dictionary);
+            String sub = substitution(focusedWord);
+            String omi = omission(focusedWord);
+            String ins = insertion(focusedWord);
+            String rev = reversal(focusedWord);
             if(sub!="none"){
                 return sub;
             }
@@ -65,16 +66,8 @@ public class checkSpelling {
         return "none";
     }
     
-    public boolean inDictionary(Hashtable<String, String> dictionary){
-        if(dictionary.containsKey(this.word.toLowerCase())){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
     
-    public String substitution(String word, Hashtable<String, String> dictionary) {
+    public String substitution(String word) {
         char alphabet[]= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; // create alphabet array
         char[] arr_word = word.toCharArray(); 
         for(int k=0;k<arr_word.length;k++){
@@ -83,7 +76,7 @@ public class checkSpelling {
                 edited_arr_word[k] = alphabet[i]; 
                 String str_word = String.valueOf(edited_arr_word); 
                 str_word.toLowerCase();
-                if(dictionary.containsKey(str_word)){ 
+                if(this.dictionary.containsKey(str_word)){ 
                     return str_word; 
                 }
             }
@@ -91,7 +84,7 @@ public class checkSpelling {
         return "none"; 
     }
 
-    public String omission(String word, Hashtable<String, String> dictionary) {
+    public String omission(String word) {
         char[] arr_word = word.toCharArray();
         for(int k=0;k<arr_word.length;k++){ 
             char[] edited_arr_word = new char[arr_word.length-1]; 
@@ -102,14 +95,14 @@ public class checkSpelling {
                 }
             }
             String str_word = String.valueOf(edited_arr_word).toLowerCase().trim(); 
-            if(dictionary.containsKey(str_word)) { 
+            if(this.dictionary.containsKey(str_word)) { 
                 return str_word;
             }
         }
         return "none"; 
     }
 
-    public String insertion(String word, Hashtable<String, String> dictionary) {
+    public String insertion(String word) {
         char alphabet[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
         char[] arr_word = word.toCharArray();
         for (int i = 0; i < arr_word.length + 1; i++) {
@@ -123,7 +116,7 @@ public class checkSpelling {
                     insert_arr_word[k + 1] = arr_word[k];
                 }
                 String str_word = String.valueOf(insert_arr_word).trim().toLowerCase();
-                if (dictionary.containsKey(str_word)) {
+                if (this.dictionary.containsKey(str_word)) {
                     return str_word;
                 }
             }
@@ -131,7 +124,7 @@ public class checkSpelling {
         return "none";
     }
 
-    public String reversal(String word, Hashtable<String, String> dictionary) {
+    public String reversal(String word) {
         char[] arr_word = word.toCharArray();
         for(int i=0;i<((arr_word.length)-1);i++){ 
             char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 
@@ -142,14 +135,13 @@ public class checkSpelling {
             String str_word = String.valueOf(edited_arr_word);
             str_word.trim(); 
             str_word.toLowerCase();
-            if (dictionary.containsKey(str_word)) {
+            if (this.dictionary.containsKey(str_word)) {
                 return str_word; 
             }
 
         }
         return "none";
     }
-    
-    
+
 
 }

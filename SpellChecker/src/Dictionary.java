@@ -70,15 +70,13 @@ public class Dictionary extends userDictionary{
         Dictionary test = new Dictionary();
         test.loadDictionary();
 
-        test.addWordUser("jawlt");
-        test.addWordUser("aaa");
+        checkSpelling test2 = new checkSpelling();
+        String str = test2.getIncorrectWord();
+        System.out.println(str);
         
-        test.combineDictionary();
-        test.combinedDictionary.remove("aaa");
-
-        for (Entry<String, String> entry : test.combinedDictionary.entrySet()) {
-            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-        } 
+       // for (Entry<String, String> entry : test2.dictionary.entrySet()) {
+      //      System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+       //} 
     }
     
 }
