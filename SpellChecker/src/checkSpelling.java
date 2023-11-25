@@ -28,7 +28,6 @@ public class checkSpelling {
     }
 
     public String getIncorrectWord() {
-        System.out.print(textDocument);
         String[] textWords = textDocument.split("\\s+");
         for (String textWord: textWords) {
             if (!this.dictionary.containsKey(textWord)){ 
@@ -40,8 +39,10 @@ public class checkSpelling {
         return this.originalWord;    
     }
 
-    public String getCorrectWord() {
-        return this.correctedWord;    
+    public String getCorrectWord(String originalWord) {
+        this.correctedWord = findCorrections(originalWord);
+        return this.correctedWord;   
+
     }
     
     public String findCorrections(String focusedWord) {

@@ -35,6 +35,7 @@ public class GUI extends Dictionary implements ActionListener {
     
     private JLabel label;
     private JFrame frame;
+    private JLayeredPane layeredPane;
 
     // Initialize menu buttons
     private JPanel topButtonPanel;
@@ -42,6 +43,7 @@ public class GUI extends Dictionary implements ActionListener {
     private JPanel errorPanel;
     private JButton openFileButton;
     private JButton saveFileButton;
+    private JButton userDictionary;
     private JButton helpButton;
     private JButton exitButton;
 
@@ -60,25 +62,19 @@ public class GUI extends Dictionary implements ActionListener {
 
         // menu buttons
         this.textDocument = new String();
+        this.layeredPane = new JLayeredPane();
         this.frame = new JFrame();
         this.topButtonPanel = new JPanel();
         this.textPanel = new JPanel();
         this.errorPanel = new JPanel();
         this.openFileButton = new JButton("Open File");
         this.saveFileButton = new JButton("Save File");
+        this.userDictionary = new JButton("View User Dictionary");
         this.helpButton = new JButton("Help");
         this.exitButton = new JButton("Exit");
-        
-        // error buttons
-        correctWord = getCorrectWord();
-        this.autoCorrectButton = new JButton("AutoCorrect: " + correctWord);
-        this.addToDictionary = new JButton("Add to Dictionary");
-        this.ignoreError = new JButton("Ignore Error");
         this.textPane = new JTextPane();
         this.scrollPane = new JScrollPane(textPane);
 
-
-        System.out.println("bogus");
         // // Get the StyledDocument of the JTextPane
         // StyledDocument doc = textPane.getStyledDocument();
         
@@ -122,9 +118,17 @@ public class GUI extends Dictionary implements ActionListener {
             scrollPane.setBounds(30, 100, 800, 910);
             setTextDoc(textDocument);
 
+            // incorrect word and related buttons
             originalWord = getIncorrectWord();
-            System.out.println("word: " + originalWord);
-            this.incorrectWord = new JButton(originalWord);
+            this.incorrectWord = new JButton(originalWord); 
+
+            // correct word buttons
+            correctWord = getCorrectWord(originalWord);
+            this.autoCorrectButton = new JButton("AutoCorrect: " + correctWord);
+
+            // add word to user dictionary button
+            this.addToDictionary = new JButton("Add to UserDictionary");
+            this.ignoreError = new JButton("Ignore Error");
 
             // display Error Buttons
             incorrectWord.addActionListener(this);
@@ -139,10 +143,10 @@ public class GUI extends Dictionary implements ActionListener {
             ignoreError.addActionListener(this);
             ignoreError.setBounds(870, 200, 155, 30);
 
-            frame.getContentPane().add(incorrectWord);
-            frame.getContentPane().add(autoCorrectButton);
-            frame.getContentPane().add(addToDictionary);
-            frame.getContentPane().add(ignoreError);
+            layeredPane.add(incorrectWord, Integer.valueOf(1));
+            layeredPane.add(autoCorrectButton, Integer.valueOf(1));
+            layeredPane.add(addToDictionary, Integer.valueOf(1));
+            layeredPane.add(ignoreError, Integer.valueOf(1));
             
         }
 
@@ -173,18 +177,14 @@ public class GUI extends Dictionary implements ActionListener {
 
         if(e.getSource() == exitButton){
             System.exit(0);
-        }
-
-        if(e.getSource() == incorrectWord){
-            System.exit(0);
-        }   
+        } 
 
         if(e.getSource() == autoCorrectButton){
             System.exit(0);
         } 
 
         if(e.getSource() == addToDictionary){
-            System.exit(0);
+            addWordUser(originalWord);
         }   
 
         if(e.getSource() == ignoreError){
@@ -221,6 +221,9 @@ public class GUI extends Dictionary implements ActionListener {
     public static void main(String[] args) {
 
         GUI testing = new GUI();
+        testing.layeredPane.setBounds(0, 0, 1380, 1080);
+        testing.frame.add(testing.layeredPane);
+
         testing.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         testing.frame.setSize(1380, 1080);
         testing.frame.setLocationRelativeTo(null);
@@ -244,6 +247,9 @@ public class GUI extends Dictionary implements ActionListener {
         testing.saveFileButton.addActionListener(testing);
         testing.saveFileButton.setBounds(140, 30, 100, 30);
 
+        testing.userDictionary.addActionListener(testing);
+        testing.userDictionary.setBounds(250, 30, 170, 30);
+
         testing.helpButton.addActionListener(testing);
         testing.helpButton.setBounds(1125, 30, 100, 30);
 ;
@@ -251,21 +257,24 @@ public class GUI extends Dictionary implements ActionListener {
         testing.exitButton.setBounds(1235, 30, 100, 30);
         
         // Display Text Document on textPanel
-        testing.textPane.setEditable(true);
+        testing.textPane.setEditable(false);
 
         testing.textPane.setText(testing.textDocument);
         testing.scrollPane.setBounds(30, 100, 800, 910);
         
         // Adding panels and buttons to frame
-        testing.frame.getContentPane().add(testing.scrollPane); 
-        testing.frame.getContentPane().add(testing.openFileButton);
-        testing.frame.getContentPane().add(testing.saveFileButton);
-        testing.frame.getContentPane().add(testing.helpButton);
-        testing.frame.getContentPane().add(testing.exitButton);
+        // Integer.valueOf(x) indicates the layer where the layered pane is, higher number means higher priority
+        testing.layeredPane.add(testing.scrollPane, Integer.valueOf(1)); 
+        testing.layeredPane.add(testing.openFileButton, Integer.valueOf(1));
+        testing.layeredPane.add(testing.saveFileButton, Integer.valueOf(1));
+        testing.layeredPane.add(testing.userDictionary, Integer.valueOf(1));
+        testing.layeredPane.add(testing.helpButton, Integer.valueOf(1));
+        testing.layeredPane.add(testing.exitButton, Integer.valueOf(1));
         
-        testing.frame.add(testing.topButtonPanel);
-        testing.frame.add(testing.textPanel);
-        testing.frame.add(testing.errorPanel);
+        testing.layeredPane.add(testing.topButtonPanel, Integer.valueOf(0));
+        testing.layeredPane.add(testing.textPanel, Integer.valueOf(0));
+        testing.layeredPane.add(testing.errorPanel, Integer.valueOf(0));
+
 
 
         testing.frame.setTitle("GUI");    
