@@ -4,7 +4,6 @@ import java.util.Map.Entry;
 
 // Dictionary(child class) inherits methods from userDictionary(super class)
 public class Dictionary extends userDictionary{
-
     private Hashtable<String, String> dictionary;
     private Hashtable<String, String> userDictionary;
     private Hashtable<String, String> combinedDictionary; 
@@ -39,6 +38,7 @@ public class Dictionary extends userDictionary{
         catch (Exception e) { 
             System.out.println("Error, could not open the file");
         }
+        setDictionary(this.dictionary);
         return this.dictionary;
     }
 

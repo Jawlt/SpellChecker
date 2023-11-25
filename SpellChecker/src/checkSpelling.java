@@ -1,24 +1,54 @@
 import java.util.Arrays;
 import java.util.Hashtable;
 
-public class checkSpelling extends Dictionary {
+public class checkSpelling {
 
     private String word;
+    private String correctedWord;
+    private String originalWord;
     public Hashtable<String, String>dictionary;
-    
-    public checkSpelling(){
-        super();
-        this.word = ;
-        this.dictionary = super.getDictionary();
+    private String textDocument;
+    public Hashtable<String, String>incorrectWordList;
 
+    public checkSpelling(){
+        this.textDocument = new String();
+        this.dictionary = new Hashtable<String, String>();
+        this.correctedWord = new String();
+        this.originalWord = new String();
+        this.incorrectWordList = new Hashtable<String, String>();
     }
 
-    public String findCorrections() {
-        if(!(this.dictionary.containsKey(this.word))){
-            String sub = substitution(this.word, dictionary);
-            String omi = omission(this.word, dictionary);
-            String ins = insertion(this.word, dictionary);
-            String rev = reversal(this.word, dictionary);
+    public void setTextDoc(String textDoc){
+        this.textDocument = textDoc;
+    }
+
+    public void setDictionary(Hashtable<String, String> dictionary){
+        this.dictionary = dictionary;
+    }
+
+    public String getIncorrectWord() {
+        String[] textWords = textDocument.split(" ");
+        for (String textWord: textWords) {
+            if (!this.dictionary.containsKey(textWord)){
+                if (findCorrections(textWord) != "none") {
+                    this.originalWord = textWord;
+                    this.correctedWord = findCorrections(textWord);
+                }
+            }
+        }
+        return this.originalWord;    
+    }
+
+    public String getCorrectWord() {
+        return this.correctedWord;    
+    }
+    
+    public String findCorrections(String focusedWord) {
+        if(!(this.dictionary.containsKey(focusedWord))){
+            String sub = substitution(focusedWord, dictionary);
+            String omi = omission(focusedWord, dictionary);
+            String ins = insertion(focusedWord, dictionary);
+            String rev = reversal(focusedWord, dictionary);
             if(sub!="none"){
                 return sub;
             }

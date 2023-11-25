@@ -1,9 +1,13 @@
 import java.util.*;
 
-public class userDictionary extends Document {
+// userDictionary(child class) inherits methods from checkSpelling(super class)
+public class userDictionary extends checkSpelling{
+    //private variables of userDictionary class
     private Hashtable<String, String> userDictionary;
 
+    // userDictionary constructor
     public userDictionary(){
+        super();
         this.userDictionary = new Hashtable<String, String>();
     }
 

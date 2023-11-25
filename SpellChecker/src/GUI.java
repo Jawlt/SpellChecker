@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.text.Style;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,19 +18,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
-public class GUI implements ActionListener {
+// GUI(child class) inherits methods from Dictionary(super class)
+public class GUI extends Dictionary implements ActionListener {
     private String correctWord; 
     private String originalWord;
     private String textDocument; // Massive peice of string to display on interface
     private List<String> correctionList = new ArrayList<String>();
     private List<String> errorSummaryBlock = new ArrayList<String>();
-    private Dictionary errorCorrectionMetrics = new Hashtable();
+    //private Dictionary errorCorrectionMetrics = new Hashtable();
     
     private JLabel label;
     private JFrame frame;
 
+    // Initialize menu buttons
     private JPanel topButtonPanel;
     private JPanel textPanel;
     private JPanel errorPanel;
@@ -37,75 +43,59 @@ public class GUI implements ActionListener {
     private JButton saveFileButton;
     private JButton helpButton;
     private JButton exitButton;
-    private JTextArea textArea;
+
+    // Initialize error buttons
+    private JButton incorrectWord; //hold the current incorrect word
+    private JButton autoCorrectButton;
+    private JButton addToDictionary;
+    private JButton ignoreError;
+
+
+    private JTextPane textPane;
     private JScrollPane scrollPane;
 
     public GUI(){
+        loadDictionary();
 
+        // menu buttons
+        this.textDocument = new String();
+        this.frame = new JFrame();
+        this.topButtonPanel = new JPanel();
+        this.textPanel = new JPanel();
+        this.errorPanel = new JPanel();
+        this.openFileButton = new JButton("Open File");
+        this.saveFileButton = new JButton("Save File");
+        this.helpButton = new JButton("Help");
+        this.exitButton = new JButton("Exit");
         
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1380, 1080);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(null);
+        // error buttons
+        originalWord = getIncorrectWord();
+        this.incorrectWord = new JButton(originalWord);
+        correctWord = getCorrectWord();
+        this.autoCorrectButton = new JButton("AutoCorrect: " + correctWord);
+        this.addToDictionary = new JButton("Add to Dictionary");
+        this.ignoreError = new JButton("Ignore Error");
+        this.textPane = new JTextPane();
+        this.scrollPane = new JScrollPane(textPane);
+        System.out.println(originalWord);
+        // Get the StyledDocument of the JTextPane
+        StyledDocument doc = textPane.getStyledDocument();
         
-        
-        // Create Panels
-        topButtonPanel = new JPanel();
-        textPanel = new JPanel();
-        errorPanel = new JPanel();
+        // Define a style
+        Style style = textPane.addStyle("Red Style", null);
+        StyleConstants.setForeground(style, Color.RED);
 
-        
-        // Setting borders for each panel
-        topButtonPanel.setBackground(Color.gray);
-        topButtonPanel.setBounds(20, 20, 1325,50);
+        // color in original error word
+        String wordToColor = originalWord;
+        String text = textPane.getText();
 
-        textPanel.setBackground(Color.gray);
-        textPanel.setBounds(20, 90, 820, 930);
-
-        errorPanel.setBackground(Color.gray);
-        errorPanel.setBounds(860, 90, 485, 930);
-
-        // Create Buttons
-        openFileButton = new JButton("Open File");
-        openFileButton.addActionListener(this);
-        openFileButton.setBounds(30, 30, 100, 30);
-
-        saveFileButton = new JButton("Save File");
-        saveFileButton.addActionListener(this);
-        saveFileButton.setBounds(140, 30, 100, 30);
-
-        helpButton = new JButton("Help");
-        helpButton.addActionListener(this);
-        helpButton.setBounds(1125, 30, 100, 30);
-
-        exitButton = new JButton("Exit");
-        exitButton.addActionListener(this);
-        exitButton.setBounds(1235, 30, 100, 30);
-
-        // Display Text Document on textPanel
-        textArea = new JTextArea();
-        textArea.setEditable(true);
-        scrollPane = new JScrollPane(textArea);
-        
-        textArea.setText(this.textDocument);
-        scrollPane.setBounds(30, 100, 800, 910);
-
-        // Adding panels and buttons to frame
-        frame.getContentPane().add(scrollPane); 
-        frame.getContentPane().add(openFileButton);
-        frame.getContentPane().add(saveFileButton);
-        frame.getContentPane().add(helpButton);
-        frame.getContentPane().add(exitButton);
-        frame.add(topButtonPanel);
-        frame.add(textPanel);
-        frame.add(errorPanel);
-
-        frame.setTitle("GUI");    
-        frame.setVisible(true);
-
+        // find index of word to apply style
+        int offset = text.indexOf(wordToColor);
+        int length = wordToColor.length();
+        if (offset != -1) {
+            doc.setCharacterAttributes(offset, length, style, false);
+        }
     }
-
     
     public void actionPerformed(ActionEvent e) {  
         if (e.getSource() == openFileButton){
@@ -127,8 +117,14 @@ public class GUI implements ActionListener {
             }
 
             this.textDocument = fileContent.toString();
-            textArea.setText(this.textDocument);
+            textPane.setText(this.textDocument);
             scrollPane.setBounds(30, 100, 800, 910);
+            setTextDoc(textDocument);
+
+            // display Error Buttons
+            incorrectWord.addActionListener(this);
+            incorrectWord.setBounds(870, 100, 465, 30);
+            
         }
 
         if(e.getSource() == saveFileButton){
@@ -139,7 +135,7 @@ public class GUI implements ActionListener {
             BufferedWriter outFile = null;
             try {
             outFile = new BufferedWriter(new FileWriter(fileName));
-            textArea.write(outFile);   // *** here: ***
+            textPane.write(outFile);   // *** here: ***
             } 
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -156,11 +152,24 @@ public class GUI implements ActionListener {
             }
         }
 
-        if(e.getSource() == exitButton){
+        if(e.getSource() == incorrectWord){
             System.exit(0);
         }   
+
+        if(e.getSource() == autoCorrectButton){
+            System.exit(0);
+        } 
+
+        if(e.getSource() == addToDictionary){
+            System.exit(0);
+        }   
+
+        if(e.getSource() == ignoreError){
+            System.exit(0);
+        }  
+
     }
-    
+
     /** 
     public void showPossibleCorrections(List<String> correctionList){
         return;
@@ -187,7 +196,59 @@ public class GUI implements ActionListener {
     }
     */
     public static void main(String[] args) {
-        new GUI();
+
+        GUI testing = new GUI();
+        testing.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        testing.frame.setSize(1380, 1080);
+        testing.frame.setLocationRelativeTo(null);
+        testing.frame.setLayout(null);
+
+        
+        // Setting borders for each panel
+        testing.topButtonPanel.setBackground(Color.gray);
+        testing.topButtonPanel.setBounds(20, 20, 1325,50);
+
+        testing.textPanel.setBackground(Color.gray);
+        testing.textPanel.setBounds(20, 90, 820, 930);
+
+        testing.errorPanel.setBackground(Color.gray);
+        testing.errorPanel.setBounds(860, 90, 485, 930);
+
+        // display menu Buttons
+        testing.openFileButton.addActionListener(testing);
+        testing.openFileButton.setBounds(30, 30, 100, 30);
+
+        testing.saveFileButton.addActionListener(testing);
+        testing.saveFileButton.setBounds(140, 30, 100, 30);
+
+        testing.helpButton.addActionListener(testing);
+        testing.helpButton.setBounds(1125, 30, 100, 30);
+;
+        testing.exitButton.addActionListener(testing);
+        testing.exitButton.setBounds(1235, 30, 100, 30);
+
+        
+        
+        // Display Text Document on textPanel
+        testing.textPane.setEditable(true);
+
+        testing.textPane.setText(testing.textDocument);
+        testing.scrollPane.setBounds(30, 100, 800, 910);
+        
+        // Adding panels and buttons to frame
+        testing.frame.getContentPane().add(testing.scrollPane); 
+        testing.frame.getContentPane().add(testing.openFileButton);
+        testing.frame.getContentPane().add(testing.saveFileButton);
+        testing.frame.getContentPane().add(testing.helpButton);
+        testing.frame.getContentPane().add(testing.exitButton);
+        testing.frame.add(testing.topButtonPanel);
+        testing.frame.add(testing.textPanel);
+        testing.frame.add(testing.errorPanel);
+
+        testing.frame.setTitle("GUI");    
+        testing.frame.setVisible(true);
+
+        
     }
 
 
