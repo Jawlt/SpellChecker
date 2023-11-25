@@ -21,7 +21,7 @@ public class userDictionary {
 
     //removes word from userDictionary if dictionary contains word
     public void removeWordUser(String word) {
-        if(!this.userDictionary.containsKey(word)){
+        if(this.userDictionary.containsKey(word)){
             this.userDictionary.remove(word, word);
         }
     }

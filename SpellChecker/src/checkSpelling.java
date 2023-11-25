@@ -1,21 +1,24 @@
 import java.util.Arrays;
 import java.util.Hashtable;
 
-public class checkSpelling {
+public class checkSpelling extends Dictionary {
 
     private String word;
-    public Hashtable<String, Boolean>dictionary;
+    public Hashtable<String, String>dictionary;
+    
+    public checkSpelling(){
+        super();
+        this.word = ;
+        this.dictionary = super.getDictionary();
 
-    public void spellChecker(String w, Hashtable<String, Boolean>dict){
-        this.word = w;
-        this.dictionary = dict;
     }
-    public static String findCorrections(String word, Hashtable<String, Boolean>dictionary) {
-        if(!(inDictionary(word, dictionary))){
-            String sub = substitution(word, dictionary);
-            String omi = omission(word, dictionary);
-            String ins = insertion(word, dictionary);
-            String rev = reversal(word, dictionary);
+
+    public String findCorrections() {
+        if(!(this.dictionary.containsKey(this.word))){
+            String sub = substitution(this.word, dictionary);
+            String omi = omission(this.word, dictionary);
+            String ins = insertion(this.word, dictionary);
+            String rev = reversal(this.word, dictionary);
             if(sub!="none"){
                 return sub;
             }
@@ -32,8 +35,8 @@ public class checkSpelling {
         return "none";
     }
     
-    private static boolean inDictionary(String word, Hashtable<String, Boolean> dictionary){
-        if(dictionary.containsKey(word.toLowerCase())){
+    public boolean inDictionary(Hashtable<String, String> dictionary){
+        if(dictionary.containsKey(this.word.toLowerCase())){
             return true;
         }
         else{
@@ -41,7 +44,7 @@ public class checkSpelling {
         }
     }
     
-    static String substitution(String word, Hashtable<String, Boolean> dictionary) {
+    public String substitution(String word, Hashtable<String, String> dictionary) {
         char alphabet[]= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; // create alphabet array
         char[] arr_word = word.toCharArray(); 
         for(int k=0;k<arr_word.length;k++){
@@ -58,7 +61,7 @@ public class checkSpelling {
         return "none"; 
     }
 
-    static String omission(String word, Hashtable<String, Boolean> dictionary) {
+    public String omission(String word, Hashtable<String, String> dictionary) {
         char[] arr_word = word.toCharArray();
         for(int k=0;k<arr_word.length;k++){ 
             char[] edited_arr_word = new char[arr_word.length-1]; 
@@ -76,7 +79,7 @@ public class checkSpelling {
         return "none"; 
     }
 
-    static String insertion(String word, Hashtable<String, Boolean> dictionary) {
+    public String insertion(String word, Hashtable<String, String> dictionary) {
         char alphabet[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
         char[] arr_word = word.toCharArray();
         for (int i = 0; i < arr_word.length + 1; i++) {
@@ -98,7 +101,7 @@ public class checkSpelling {
         return "none";
     }
 
-    static String reversal(String word, Hashtable<String, Boolean> dictionary) {
+    public String reversal(String word, Hashtable<String, String> dictionary) {
         char[] arr_word = word.toCharArray();
         for(int i=0;i<((arr_word.length)-1);i++){ 
             char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 

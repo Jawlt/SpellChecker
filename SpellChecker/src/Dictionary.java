@@ -11,9 +11,15 @@ public class Dictionary extends userDictionary{
 
     // Dictionary constructor
     public Dictionary() {
+        super(); //call userDictionary constructor
         this.dictionary = new Hashtable<String, String>();
-        this.userDictionary = new Hashtable<String, String>();
+        this.userDictionary = super.getUserDictionary();
         this.combinedDictionary = new Hashtable<String, String>();
+    }
+
+    // Get dictionary method
+    public Hashtable<String, String> getDictionary(){
+        return this.dictionary;
     }
 
     // Loads words from the Dictionary text file to the Dictionary hashtable
@@ -21,7 +27,7 @@ public class Dictionary extends userDictionary{
         this.dictionary.clear();
 
         try {
-            File githubFile = new File("/SpellChecker/testDictionary.txt");
+            File githubFile = new File("./SpellChecker/testDictionary.txt");
             Scanner fileScan = new Scanner(githubFile);
 
             while (fileScan.hasNextLine()) {
@@ -43,24 +49,36 @@ public class Dictionary extends userDictionary{
         this.userDictionary = getUserDictionary();
         
         // Combine userDictionary and dictionary into one hashtable
-        userDictionary.putAll(dictionary);
-        this.combinedDictionary.putAll(userDictionary);
+        this.combinedDictionary.putAll(dictionary);
+
+        // Iterate through userDictionary and add unique entries to the combined hashtable
+        // Store all Hashtable entries into a Set ussing entrySet() method
+        for (Entry<String, String> entry: userDictionary.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            // Check if the key already exists in the combined hashtable
+            if (!combinedDictionary.containsKey(key)) {
+                // If the key is not already present, add the key-value pair
+                combinedDictionary.put(key, value);
+            } 
+        }
     }
 
-    public void main(String[] args) {
+    /** Testing the dictionary/user dictionary: [UPDATE: it works now ~lance, jawlt*/
+    public static void main(String[] args) {
         Dictionary test = new Dictionary();
         test.loadDictionary();
 
-        userDictionary.put("jawlt", "jawlt");
-        userDictionary.put("aaa", "aaa");
-        userDictionary.remove("aaa");
+        test.addWordUser("jawlt");
+        test.addWordUser("aaa");
+        
         test.combineDictionary();
+        test.combinedDictionary.remove("aaa");
 
-        for (Entry<String, String> entry : this.combinedDictionary.entrySet()) {
+        for (Entry<String, String> entry : test.combinedDictionary.entrySet()) {
             System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-        }
-        
-        
+        } 
     }
     
 }
