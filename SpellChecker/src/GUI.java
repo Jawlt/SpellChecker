@@ -77,24 +77,25 @@ public class GUI extends Dictionary implements ActionListener {
         this.ignoreError = new JButton("Ignore Error");
         this.textPane = new JTextPane();
         this.scrollPane = new JScrollPane(textPane);
-        System.out.println(originalWord);
-        // Get the StyledDocument of the JTextPane
-        StyledDocument doc = textPane.getStyledDocument();
         
-        // Define a style
-        Style style = textPane.addStyle("Red Style", null);
-        StyleConstants.setForeground(style, Color.RED);
+        System.out.println(originalWord);
+        // // Get the StyledDocument of the JTextPane
+        // StyledDocument doc = textPane.getStyledDocument();
+        
+        // // Define a style
+        // Style style = textPane.addStyle("Red Style", null);
+        // StyleConstants.setForeground(style, Color.RED);
 
-        // color in original error word
-        String wordToColor = originalWord;
-        String text = textPane.getText();
+        // // color in original error word
+        // String wordToColor = originalWord;
+        // String text = textPane.getText();
 
-        // find index of word to apply style
-        int offset = text.indexOf(wordToColor);
-        int length = wordToColor.length();
-        if (offset != -1) {
-            doc.setCharacterAttributes(offset, length, style, false);
-        }
+        // // find index of word to apply style
+        // int offset = text.indexOf(wordToColor);
+        // int length = wordToColor.length();
+        // if (offset != -1) {
+        //     doc.setCharacterAttributes(offset, length, style, false);
+        // }
     }
     
     public void actionPerformed(ActionEvent e) {  
@@ -150,6 +151,10 @@ public class GUI extends Dictionary implements ActionListener {
                    }
                 }
             }
+        }
+
+        if(e.getSource() == exitButton){
+            System.exit(0);
         }
 
         if(e.getSource() == incorrectWord){

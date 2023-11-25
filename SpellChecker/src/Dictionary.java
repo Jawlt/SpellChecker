@@ -26,7 +26,7 @@ public class Dictionary extends userDictionary{
         this.dictionary.clear();
 
         try {
-            File githubFile = new File("./SpellChecker/testDictionary.txt");
+            File githubFile = new File("./SpellChecker/words_alpha.txt");
             Scanner fileScan = new Scanner(githubFile);
 
             while (fileScan.hasNextLine()) {
