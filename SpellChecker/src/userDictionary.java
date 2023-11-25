@@ -1,23 +1,28 @@
 import java.util.*;
 
-public class userDictionary{
-    private List<String> userDictionary = new ArrayList<String>();
+public class userDictionary {
+    private Hashtable<String, String> userDictionary;
 
-    public List<String> getUserDictionary(){
-        return userDictionary;
+    public userDictionary(){
+        this.userDictionary = new Hashtable<String, String>();
     }
 
-    public List<String> storeUserDictionary(List<String> userDictionary){
-        return userDictionary;
+    public Hashtable<String, String> getUserDictionary(){
+        return this.userDictionary;
     }
 
-    public List<String> addWord(String word, List<String> userDictionary){
-        userDictionary.add(word);
-        return userDictionary;
+    //adds word into userDictionary only if dictionary doesn't contain word
+    public void addWordUser(String word) {
+        if(!this.userDictionary.containsKey(word)){
+            this.userDictionary.put(word, word);
+        }
+
     }
 
-    public List<String> removeWord(String word, List<String> userDictionary){
-        userDictionary.remove(word);
-        return userDictionary;
+    //removes word from userDictionary if dictionary contains word
+    public void removeWordUser(String word) {
+        if(!this.userDictionary.containsKey(word)){
+            this.userDictionary.remove(word, word);
+        }
     }
 }

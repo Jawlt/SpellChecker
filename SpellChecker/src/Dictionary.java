@@ -1,122 +1,66 @@
+import java.io.File;
 import java.util.*;
+import java.util.Map.Entry;
 
-public class Dictionary {
+// Dictionary(child class) inherits methods from userDictionary(super class)
+public class Dictionary extends userDictionary{
 
+    private Hashtable<String, String> dictionary;
+    private Hashtable<String, String> userDictionary;
+    private Hashtable<String, String> combinedDictionary; 
 
-    private List<String> wordList;
-
-    private List<String> dictionary;
-
-    private List<String> userDictionary;
-
-    private List<String> combinedDictionary;
-
+    // Dictionary constructor
     public Dictionary() {
-
-        this.wordList = new ArrayList<>();
-
-        this.dictionary = new ArrayList<>();
-
-        this.userDictionary = new ArrayList<>();
-
-        this.combinedDictionary = new ArrayList<>();
-
-        this.userErrors = new ArrayList<>();
-
+        this.dictionary = new Hashtable<String, String>();
+        this.userDictionary = new Hashtable<String, String>();
+        this.combinedDictionary = new Hashtable<String, String>();
     }
 
-    public HashMap<String, String> loadDictionary() {
-
+    // Loads words from the Dictionary text file to the Dictionary hashtable
+    public Hashtable<String, String> loadDictionary() {
         this.dictionary.clear();
 
         try {
-
-            File githubFile = new File("words_alpha.txt");
-
+            File githubFile = new File("/SpellChecker/testDictionary.txt");
             Scanner fileScan = new Scanner(githubFile);
 
             while (fileScan.hasNextLine()) {
-
                 String dictWord = fileScan.nextLine();
-
                 this.dictionary.put(dictWord, dictWord);
-
             }
-
             fileScan.close();
-            
-
         } 
-        
-        catch (Exception e) {
-            
+        catch (Exception e) { 
             System.out.println("Error, could not open the file");
         }
-
         return this.dictionary;
     }
 
-    public List<String> loadUserDictionary() {
-
-        this.userDictionary.clear();
-
-        try {
-
-            File userDict = new File("userdictionary.txt");
-
-            Scanner dictScan = new Scanner(userDict);
-
-            while (dictScan.hasNextLine()) {
-
-                String dictWord = dictScan.nextLine();
-
-                this.userDictionary.add(dictWord);
-
-                if(!this.dictionary.containsKey(dictWord)) {
-
-                    this.userErrors.add(dictWord);
-                }
-
-
-            }
-
-            dictScan.close();
-            
-        } 
-        
-        catch (Exception e) {
-            
-            System.out.println("Error, user dictionary could not be loaded");
-        }
-
-        return this.userErrors;
-    }
-
-    public List<String> combineDictionary(List<String> wordList, List<String> userDictionary) {
-
+    // Combines userDictionary and Dictionary into combinedDictionary hashtable
+    public void combineDictionary() {
         this.combinedDictionary.clear();
 
-        this.combinedDictionary.addAll(wordList);
-
-        this.combinedDictionary.addAll(userDictionary);
-
-        return this.combinedDictionary;
-
+        this.userDictionary = getUserDictionary();
+        
+        // Combine userDictionary and dictionary into one hashtable
+        userDictionary.putAll(dictionary);
+        this.combinedDictionary.putAll(userDictionary);
     }
 
-    public List<String> addWord (String word, List<String> wordList) {
+    public void main(String[] args) {
+        Dictionary test = new Dictionary();
+        test.loadDictionary();
 
-        wordList.add(word);
+        userDictionary.put("jawlt", "jawlt");
+        userDictionary.put("aaa", "aaa");
+        userDictionary.remove("aaa");
+        test.combineDictionary();
 
-        return wordList;
-
-    }
-
-    public List<String> removeWord(String word, List<String> wordList) {
-
-        wordList.remove(word);
-
-        return wordList;
+        for (Entry<String, String> entry : this.combinedDictionary.entrySet()) {
+            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+        }
+        
+        
     }
     
 }
