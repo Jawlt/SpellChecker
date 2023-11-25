@@ -41,19 +41,15 @@ public class GUI implements ActionListener {
     private JScrollPane scrollPane;
 
     public GUI(){
-        frame = new JFrame();
-        /** 
-        JButton button = new JButton("Click me");
-        button.addActionListener(this);
 
-        label = new JLabel("Number of clicks: 0");
-        */
+        
+        frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1380, 1080);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         
-
+        
         // Create Panels
         topButtonPanel = new JPanel();
         textPanel = new JPanel();

@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class userDictionary {
+public class userDictionary extends Document {
     private Hashtable<String, String> userDictionary;
 
     public userDictionary(){
