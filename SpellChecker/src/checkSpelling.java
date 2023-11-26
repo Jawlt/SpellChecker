@@ -44,25 +44,42 @@ public class checkSpelling {
     }
     
     public String findCorrections(String focusedWord) {
-        if(!(this.dictionary.containsKey(focusedWord))){
-            String sub = substitution(focusedWord);
-            String omi = omission(focusedWord);
-            String ins = insertion(focusedWord);
-            String rev = reversal(focusedWord);
-            if(rev!="none"){
-                return rev;
+        boolean checkCap = false;
+        String returnWord = "none";
+        String lowerCaseWord = focusedWord.toLowerCase();
+        if(!(this.dictionary.containsKey(lowerCaseWord))){
+            String ins_space = insertionSpace(lowerCaseWord);
+            String sub = substitution(lowerCaseWord);
+            String omi = omission(lowerCaseWord);
+            String ins = insertion(lowerCaseWord);
+            String rev = reversal(lowerCaseWord);
+            if(ins_space!="none"){
+                returnWord = ins_space;
+            }
+            else if(rev!="none"){
+                returnWord = rev;
             }
             else if(sub!="none"){
-                return sub;
+                returnWord = sub;
             }
             else if(ins!="none"){
-                return ins;
+                returnWord = ins;
             }
             else if(omi!="none"){
-                return omi;
+                returnWord = omi;
             }
         }
-        return "none";
+        char alphabet[]= {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        char[] arr_focusedWord = focusedWord.toCharArray();
+        for(int i = 0; i<alphabet.length; i++){
+            if(arr_focusedWord[0] == alphabet[i]){
+                char[] arr_returnWord = returnWord.toCharArray();
+                arr_returnWord[0] = Character.toUpperCase(arr_returnWord[0]);
+            }
+        }
+            
+        
+        return returnWord;
     }
     
     
@@ -120,6 +137,25 @@ public class checkSpelling {
                     return str_word;
                 }
             }
+        }
+        return "none";
+    }
+    public String insertionSpace(String word) {
+        char[] arr_word = word.toCharArray();
+        for (int i = 1; i < arr_word.length; i++) {
+            char[] insert_arr_word = new char[arr_word.length + 1]; 
+            for (int k = 0; k < i; k++) {
+                insert_arr_word[k] = arr_word[k]; 
+            }
+            insert_arr_word[i] = ' ';
+            for (int k = i; k < arr_word.length; k++) {
+                insert_arr_word[k + 1] = arr_word[k];
+            }
+            String str_word = String.valueOf(insert_arr_word).trim().toLowerCase();
+            if (this.dictionary.containsKey(str_word)) {
+                return str_word;
+            }
+            
         }
         return "none";
     }

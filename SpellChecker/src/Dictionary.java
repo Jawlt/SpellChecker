@@ -77,6 +77,7 @@ public class Dictionary extends userDictionary{
         
         System.out.println(test.insertion("aplpe"));
         System.out.println(test.omission("aplpe"));
+        System.out.println(test.insertionSpace("isa"));
     }
     
 }
