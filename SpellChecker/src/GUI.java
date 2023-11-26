@@ -1,13 +1,11 @@
 import java.util.*;
 import java.awt.Color;
-import java.awt.TextArea;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,19 +14,15 @@ import javax.swing.text.Style;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import javax.swing.border.LineBorder;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 // GUI(child class) inherits methods from Dictionary(super class)
 public class GUI extends Dictionary implements ActionListener {
-    private static final Object DropTargetDropEvent = null;
 	private String correctWord; 
     private String originalWord;
     private String textDocument; // Massive peice of string to display on interface
