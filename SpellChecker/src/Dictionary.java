@@ -63,6 +63,7 @@ public class Dictionary extends userDictionary{
                 combinedDictionary.put(key, value);
             } 
         }
+        setDictionary(combinedDictionary);
     }
 
     /** Testing the dictionary/user dictionary: [UPDATE: it works now ~lance, jawlt*/
@@ -70,13 +71,12 @@ public class Dictionary extends userDictionary{
         Dictionary test = new Dictionary();
         test.loadDictionary();
 
-        checkSpelling test2 = new checkSpelling();
-        String str = test2.getIncorrectWord();
-        System.out.println(str);
         
-       // for (Entry<String, String> entry : test2.dictionary.entrySet()) {
-      //      System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-       //} 
+        System.out.println(test.reversal("phtoo"));
+        System.out.println(test.substitution("aplpe"));
+        
+        System.out.println(test.insertion("aplpe"));
+        System.out.println(test.omission("aplpe"));
     }
     
 }

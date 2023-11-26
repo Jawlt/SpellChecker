@@ -36,7 +36,7 @@ public class checkSpelling {
             
             }
         }
-        return this.originalWord;    
+        return null;    
     }
 
     public String getCorrectWord(String originalWord) {
@@ -51,17 +51,17 @@ public class checkSpelling {
             String omi = omission(focusedWord);
             String ins = insertion(focusedWord);
             String rev = reversal(focusedWord);
-            if(sub!="none"){
-                return sub;
+            if(rev!="none"){
+                return rev;
             }
-            else if(omi!="none"){
-                return omi;
+            else if(sub!="none"){
+                return sub;
             }
             else if(ins!="none"){
                 return ins;
             }
-            else if(rev!="none"){
-                return rev;
+            else if(omi!="none"){
+                return omi;
             }
         }
         return "none";
@@ -70,13 +70,14 @@ public class checkSpelling {
     
     public String substitution(String word) {
         char alphabet[]= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; // create alphabet array
-        char[] arr_word = word.toCharArray(); 
+        char[] arr_word = word.toCharArray();
+         
         for(int k=0;k<arr_word.length;k++){
             char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 
             for(int i=0;i<alphabet.length;i++){ 
                 edited_arr_word[k] = alphabet[i]; 
                 String str_word = String.valueOf(edited_arr_word); 
-                str_word.toLowerCase();
+                str_word = str_word.toLowerCase();
                 if(this.dictionary.containsKey(str_word)){ 
                     return str_word; 
                 }

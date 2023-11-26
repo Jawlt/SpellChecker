@@ -33,7 +33,6 @@ public class GUI extends Dictionary implements ActionListener {
     private List<String> errorSummaryBlock = new ArrayList<String>();
     //private Dictionary errorCorrectionMetrics = new Hashtable();
     
-    private JLabel label;
     private JFrame frame;
     private JLayeredPane layeredPane;
 
@@ -129,8 +128,8 @@ public class GUI extends Dictionary implements ActionListener {
             }
 
             // correct word buttons
-            correctWord = getCorrectWord(originalWord);
-            this.autoCorrectButton = new JButton("AutoCorrect: " + correctWord);
+            this.correctWord = getCorrectWord(originalWord);
+            this.autoCorrectButton = new JButton("AutoCorrect: " + this.correctWord);
 
             // add word to user dictionary button
             this.addToDictionary = new JButton("Add to UserDictionary");
@@ -138,16 +137,16 @@ public class GUI extends Dictionary implements ActionListener {
 
             // display Error Buttons
             incorrectWord.addActionListener(this);
-            incorrectWord.setBounds(870, 100, 155, 30);
+            incorrectWord.setBounds(870, 100, 200, 30);
             
             autoCorrectButton.addActionListener(this);
-            autoCorrectButton.setBounds(870, 140, 155, 30);
+            autoCorrectButton.setBounds(870, 140, 200, 30);
 
             addToDictionary.addActionListener(this);
-            addToDictionary.setBounds(870, 170, 155, 30);
+            addToDictionary.setBounds(870, 170, 200, 30);
 
             ignoreError.addActionListener(this);
-            ignoreError.setBounds(870, 200, 155, 30);
+            ignoreError.setBounds(870, 200, 200, 30);
             
             layeredPane.add(incorrectWord, Integer.valueOf(1));
             layeredPane.add(autoCorrectButton, Integer.valueOf(1));
@@ -190,7 +189,6 @@ public class GUI extends Dictionary implements ActionListener {
             userFrame.add(textPane);
             userFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             userFrame.setVisible(true);
-
         } 
 
         if(e.getSource() == exitButton){
@@ -198,23 +196,78 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == autoCorrectButton){
-           // textPane.setText();
+            this.textDocument = this.textDocument.replace(this.originalWord, this.correctWord);
+            textPane.setText(this.textDocument);
+
+            // Get the StyledDocument of the JTextPane
+            StyledDocument doc = textPane.getStyledDocument();
+            // Define a style
+            Style style = textPane.addStyle("Green Style", null);
+            StyleConstants.setForeground(style, Color.GREEN);
+
+            // color in original error word
+            String wordToColor = this.correctWord;
+
+            // find index of word to apply style
+            int offset = this.textDocument.indexOf(wordToColor);
+            int length = wordToColor.length();
+            if (offset != -1) {
+                doc.setCharacterAttributes(offset, length, style, false);
+            }
+            findNextError();
         } 
 
         // if user presses addToDictionary button
         // for ignoreError button, add to user dictonary as well. Since if the user wants to ignore for one word, ignore for the rest as well
         if(e.getSource() == addToDictionary || e.getSource() == ignoreError){
             addWordUser(originalWord);
+            combineDictionary();
+            findNextError();
         }    
 
     }
 
-    /** 
-    public String applyCorrection(String orignalWord, String correctWord){
-        return correctWord;
+    private void findNextError() { 
+        // updates the textDocument
+        setTextDoc(this.textDocument);
+        
+        // gets the next incorrect word
+        this.originalWord = getIncorrectWord();
+        // Get the StyledDocument of the JTextPane
+        StyledDocument doc = textPane.getStyledDocument();
+            
+        // Define a style
+        Style style = textPane.addStyle("Red Style", null);
+        StyleConstants.setForeground(style, Color.RED);
+
+        // color in original error word
+        String wordToColor = this.originalWord;
+
+        // find index of word to apply style
+        int offset = this.textDocument.indexOf(wordToColor);
+        int length = wordToColor.length();
+        if (offset != -1) {
+            doc.setCharacterAttributes(offset, length, style, false);
+        }
+
+        // if no more errors
+        if (this.originalWord == null) {
+            incorrectWord.setVisible(false);
+            autoCorrectButton.setVisible(false);
+            addToDictionary.setVisible(false);
+            ignoreError.setVisible(false);
+        } 
+        else {
+            //find corrected word
+            this.correctWord = findCorrections(this.originalWord);
+            
+            // update the buttons for the next error
+            incorrectWord.setText(originalWord);
+            correctWord = getCorrectWord(originalWord);
+            autoCorrectButton.setText("AutoCorrect: " + correctWord);
+        }
     }
-
-
+    /** 
     public String viewErrorSummary(){
 
     }
@@ -223,8 +276,8 @@ public class GUI extends Dictionary implements ActionListener {
 
     }
     */
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         GUI testing = new GUI();
         testing.layeredPane.setBounds(0, 0, 1380, 1080);
         testing.frame.add(testing.layeredPane);
