@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Map.Entry;
 
 // userDictionary(child class) inherits methods from checkSpelling(super class)
 public class userDictionary extends checkSpelling{
@@ -28,5 +29,15 @@ public class userDictionary extends checkSpelling{
         if(this.userDictionary.containsKey(word)){
             this.userDictionary.remove(word, word);
         }
+    }
+
+    public String userDictionarytoString(){
+        StringBuilder sb = new StringBuilder();
+        for (Entry<String, String> entry: this.userDictionary.entrySet()) {  
+            String key = entry.getKey();
+            sb.append(key).append("\n");
+        }
+        String result = sb.toString();
+        return result;
     }
 }
