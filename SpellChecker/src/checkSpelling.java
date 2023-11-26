@@ -1,10 +1,8 @@
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.Map.Entry;
 
 public class checkSpelling {
 
-    private String word;
     private String correctedWord;
     private String originalWord;
     public Hashtable<String, String>dictionary;
