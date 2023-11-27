@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -42,6 +43,7 @@ public class GUI extends Dictionary implements ActionListener {
     private JButton resetButton;
     private JButton spellCheck;
     private JButton viewUserDictionary;
+    private JButton removeUserDictionaryWord;
     private JButton helpButton;
     private JButton exitButton;
 
@@ -72,6 +74,7 @@ public class GUI extends Dictionary implements ActionListener {
         this.resetButton = new JButton("Reset");
         this.saveFileButton = new JButton("Save File");
         this.viewUserDictionary = new JButton("View User Dictionary");
+        this.removeUserDictionaryWord = new JButton("Remove Word");
         this.spellCheck = new JButton("SpellCheck");
         this.helpButton = new JButton("Help");
         this.exitButton = new JButton("Exit");
@@ -109,6 +112,7 @@ public class GUI extends Dictionary implements ActionListener {
 
         viewUserDictionary.addActionListener(this);
         viewUserDictionary.setBounds(250, 30, 170, 30);
+
 
         spellCheck.addActionListener(this);
         spellCheck.setBounds(730, 30, 100, 30);
@@ -257,10 +261,23 @@ public class GUI extends Dictionary implements ActionListener {
 
             userFrame.setTitle("User Dictionary");
             userFrame.setBounds(0, 0, 500, 500);
+
+            removeUserDictionaryWord.addActionListener(this);
+            removeUserDictionaryWord.setBounds(330, 10, 150, 30);
+
+            userFrame.add(removeUserDictionaryWord);
             userFrame.add(textPane);
+            
             userFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             userFrame.setVisible(true);
         } 
+
+        if(e.getSource() == removeUserDictionaryWord){
+            String wordToRemove = JOptionPane.showInputDialog("Enter Word to Remove");
+            removeWordUser(wordToRemove);
+            textPane.setText(userDictionarytoString());
+            findNextError();
+        }
 
         if(e.getSource() == spellCheck){
             this.textDocument = textPane.getText().toString();
