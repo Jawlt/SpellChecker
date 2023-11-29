@@ -39,6 +39,7 @@ public class Dictionary extends userDictionary{
             System.out.println("Error, could not open the file");
         }
         setDictionary(this.dictionary);
+        
         return this.dictionary;
     }
 
@@ -65,19 +66,29 @@ public class Dictionary extends userDictionary{
         }
         setDictionary(combinedDictionary);
     }
-
+    
+    //removes word from userDictionary if dictionary contains word
+    public void removeWordDictionary(String word) {
+        if(this.dictionary.containsKey(word)){
+            this.dictionary.remove(word, word);
+        }
+    }
+    
     /** Testing the dictionary/user dictionary: [UPDATE: it works now ~lance, jawlt*/
     public static void main(String[] args) {
         Dictionary test = new Dictionary();
         test.loadDictionary();
 
         
-        System.out.println(test.reversal("phtoo"));
-        System.out.println(test.substitution("aplpe"));
+        //System.out.println(test.reversal("phtoo"));
+        //System.out.println(test.substitution("aplpe"));
         
-        System.out.println(test.insertion("aplpe"));
-        System.out.println(test.omission("aplpe"));
-        System.out.println(test.insertionSpace("isa"));
+        //System.out.println(test.insertion("aplpe"));
+        //System.out.println(test.omission("aplpe"));
+        //System.out.println(test.insertionSpace("isa"));
+
+        System.out.println(test.getSubstitution("code."));
+        System.out.println(test.addPunctuation(test.removePunctuations("code")));
+        //System.out.println(test.addPunctuation(test.removePunctuations("boy-cot")));
     }
-    
 }

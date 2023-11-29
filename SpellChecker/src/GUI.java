@@ -24,7 +24,7 @@ import javax.swing.text.StyledDocument;
 
 // GUI(child class) inherits methods from Dictionary(super class)
 public class GUI extends Dictionary implements ActionListener {
-	private String correctWord; 
+	private String correctSubstitutionWord, correctOmissionWord, correctInsertionWord, correctInsertionSpaceWord, correctReversalWord, correctManualWord; 
     private String originalWord;
     private String textDocument; // Massive peice of string to display on interface
     private List<String> correctionList = new ArrayList<String>();
@@ -49,7 +49,14 @@ public class GUI extends Dictionary implements ActionListener {
 
     // Initialize error buttons
     private JButton incorrectWord; //hold the current incorrect word
-    private JButton autoCorrectButton;
+    private JButton substitution;
+    private JButton omission;
+    private JButton insertion;
+    private JButton insertionSpace;
+    private JButton reversal;
+    private JButton manual;
+
+    // Initialize other buttons
     private JButton addToDictionary;
     private JButton ignoreError;
 
@@ -112,7 +119,6 @@ public class GUI extends Dictionary implements ActionListener {
 
         viewUserDictionary.addActionListener(this);
         viewUserDictionary.setBounds(250, 30, 170, 30);
-
 
         spellCheck.addActionListener(this);
         spellCheck.setBounds(730, 30, 100, 30);
@@ -194,28 +200,65 @@ public class GUI extends Dictionary implements ActionListener {
             }
 
             // correct word buttons
-            this.correctWord = getCorrectWord(originalWord);
-            this.autoCorrectButton = new JButton("AutoCorrect: " + this.correctWord);
+            this.correctSubstitutionWord = getSubstitution(this.originalWord);
+            this.correctOmissionWord = getOmission(this.originalWord);
+            this.correctInsertionWord = getInsertion(this.originalWord);
+            this.correctInsertionSpaceWord = getInsertionSpace(this.originalWord);
+            this.correctReversalWord = getReversal(this.originalWord);
+            
+            
+            //add word to error buttons
+            this.substitution = new JButton("Substitution: " + this.correctSubstitutionWord);
+            this.omission = new JButton("Omission: " + this.correctOmissionWord);
+            this.insertion = new JButton("Insertion: " + this.correctInsertionWord);
+            this.insertionSpace = new JButton("InsertionSpace: " + this.correctInsertionSpaceWord);
+            this.reversal = new JButton("Reversal: "+ this.correctReversalWord);
+            this.manual = new JButton("Manual: ");
+
 
             // add word to user dictionary button
             this.addToDictionary = new JButton("Add to UserDictionary");
             this.ignoreError = new JButton("Ignore Error");
 
-            // display Error Buttons
+            // error buttons action listeners
             incorrectWord.addActionListener(this);
             incorrectWord.setBounds(870, 100, 465, 30);
             
-            autoCorrectButton.addActionListener(this);
-            autoCorrectButton.setBounds(870, 140, 140, 30);
+            substitution.addActionListener(this);
+            substitution.setBounds(870, 140, 232, 30);
 
+            omission.addActionListener(this);
+            omission.setBounds(1102, 140, 232, 30);
+            
+            insertion.addActionListener(this);
+            insertion.setBounds(870, 180, 232, 30);
+            
+            insertionSpace.addActionListener(this);
+            insertionSpace.setBounds(1102, 180, 232, 30);
+            
+            reversal.addActionListener(this);
+            reversal.setBounds(870, 220, 232, 30);
+
+            manual.addActionListener(this);
+            reversal.setBounds(1102, 220, 232, 30);
+
+            // other buttons
             addToDictionary.addActionListener(this);
-            addToDictionary.setBounds(870, 170, 200, 30);
+            addToDictionary.setBounds(870, 260, 465, 30);
 
             ignoreError.addActionListener(this);
-            ignoreError.setBounds(1070, 170, 140, 30);
+            ignoreError.setBounds(870, 300, 465, 30);
             
             layeredPane.add(incorrectWord, Integer.valueOf(1));
-            layeredPane.add(autoCorrectButton, Integer.valueOf(1));
+            
+            // error buttons added to layered pane
+            layeredPane.add(substitution, Integer.valueOf(1));
+            layeredPane.add(omission, Integer.valueOf(1));
+            layeredPane.add(insertion, Integer.valueOf(1));
+            layeredPane.add(insertionSpace, Integer.valueOf(1));
+            layeredPane.add(reversal, Integer.valueOf(1));
+            layeredPane.add(manual, Integer.valueOf(1));
+            
             layeredPane.add(addToDictionary, Integer.valueOf(1));
             layeredPane.add(ignoreError, Integer.valueOf(1));
 
@@ -276,6 +319,8 @@ public class GUI extends Dictionary implements ActionListener {
             String wordToRemove = JOptionPane.showInputDialog("Enter Word to Remove");
             removeWordUser(wordToRemove);
             textPane.setText(userDictionarytoString());
+            removeWordDictionary(wordToRemove); //remove the word from the combined dictionary
+            setTextDoc(this.textPane.getText());
             findNextError();
         }
 
@@ -305,9 +350,21 @@ public class GUI extends Dictionary implements ActionListener {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
 
+        
             // correct word buttons
-            this.correctWord = getCorrectWord(originalWord);
-            this.autoCorrectButton = new JButton("AutoCorrect: " + this.correctWord);
+            this.correctSubstitutionWord = getSubstitution(this.originalWord);
+            this.correctOmissionWord = getOmission(this.originalWord);
+            this.correctInsertionWord = getInsertion(this.originalWord);
+            this.correctInsertionSpaceWord = getInsertionSpace(this.originalWord);
+            this.correctReversalWord = getReversal(this.originalWord);
+
+            //add word to error buttons
+            this.substitution = new JButton("Substitution: " + this.correctSubstitutionWord);
+            this.omission = new JButton("Omission: " + this.correctOmissionWord);
+            this.insertion = new JButton("Insertion: " + this.correctInsertionWord);
+            this.insertionSpace = new JButton("InsertionSpace: " + this.correctInsertionSpaceWord);
+            this.reversal = new JButton("Reversal: "+ this.correctReversalWord);
+            this.manual = new JButton("Manual: ");
 
             // add word to user dictionary button
             this.addToDictionary = new JButton("Add to UserDictionary");
@@ -317,17 +374,42 @@ public class GUI extends Dictionary implements ActionListener {
             incorrectWord.addActionListener(this);
             incorrectWord.setBounds(870, 100, 465, 30);
             
-            autoCorrectButton.addActionListener(this);
-            autoCorrectButton.setBounds(870, 140, 140, 30);
+            // error buttons action listener
+            substitution.addActionListener(this);
+            substitution.setBounds(870, 140, 232, 30);
 
+            omission.addActionListener(this);
+            omission.setBounds(1102, 140, 232, 30);
+            
+            insertion.addActionListener(this);
+            insertion.setBounds(870, 180, 232, 30);
+            
+            insertionSpace.addActionListener(this);
+            insertionSpace.setBounds(1102, 180, 232, 30);
+            
+            reversal.addActionListener(this);
+            reversal.setBounds(870, 220, 232, 30);
+
+            manual.addActionListener(this);
+            manual.setBounds(1102, 220, 232, 30);
+
+            // other buttons
             addToDictionary.addActionListener(this);
-            addToDictionary.setBounds(870, 170, 200, 30);
+            addToDictionary.setBounds(870, 260, 465, 30);
 
             ignoreError.addActionListener(this);
-            ignoreError.setBounds(1070, 170, 140, 30);
+            ignoreError.setBounds(870, 300, 465, 30);
             
             layeredPane.add(incorrectWord, Integer.valueOf(1));
-            layeredPane.add(autoCorrectButton, Integer.valueOf(1));
+
+            // error buttons added to layered pane
+            layeredPane.add(substitution, Integer.valueOf(1));
+            layeredPane.add(omission, Integer.valueOf(1));
+            layeredPane.add(insertion, Integer.valueOf(1));
+            layeredPane.add(insertionSpace, Integer.valueOf(1));
+            layeredPane.add(reversal, Integer.valueOf(1));
+            layeredPane.add(manual, Integer.valueOf(1));
+
             layeredPane.add(addToDictionary, Integer.valueOf(1));
             layeredPane.add(ignoreError, Integer.valueOf(1));
 
@@ -341,8 +423,8 @@ public class GUI extends Dictionary implements ActionListener {
             System.exit(0);
         } 
 
-        if(e.getSource() == autoCorrectButton){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctWord);
+        if(e.getSource() == substitution){
+            this.textDocument = this.textDocument.replace(this.originalWord, this.correctSubstitutionWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -352,7 +434,7 @@ public class GUI extends Dictionary implements ActionListener {
             StyleConstants.setForeground(style, Color.GREEN);
 
             // color in original error word
-            String wordToColor = this.correctWord;
+            String wordToColor = this.correctSubstitutionWord;
 
             // find index of word to apply style
             int offset = this.textDocument.indexOf(wordToColor);
@@ -399,18 +481,33 @@ public class GUI extends Dictionary implements ActionListener {
         // if no more errors
         if (this.originalWord == null) {
             incorrectWord.setVisible(false);
-            autoCorrectButton.setVisible(false);
+            substitution.setVisible(false);
+            omission.setVisible(false);
+            insertion.setVisible(false);
+            insertionSpace.setVisible(false);
+            reversal.setVisible(false);
+            manual.setVisible(false);
             addToDictionary.setVisible(false);
             ignoreError.setVisible(false);
         } 
         else {
             //find corrected word
-            this.correctWord = findCorrections(this.originalWord);
+            // this.correctWord = findCorrections(this.originalWord);
             
             // update the buttons for the next error
             incorrectWord.setText(originalWord);
-            correctWord = getCorrectWord(originalWord);
-            autoCorrectButton.setText("AutoCorrect: " + correctWord);
+            this.correctSubstitutionWord = getSubstitution(this.originalWord);
+            this.correctOmissionWord = getOmission(this.originalWord);
+            this.correctInsertionWord = getInsertion(this.originalWord);
+            this.correctInsertionSpaceWord = getInsertionSpace(this.originalWord);
+            this.correctReversalWord = getReversal(this.originalWord);
+
+            substitution.setText("Subsitution: " + this.correctSubstitutionWord);
+            omission.setText("Omission: "+ this.correctOmissionWord);
+            insertion.setText("Insertion: " + this.correctInsertionWord);
+            insertionSpace.setText("InsertionSpace: " + this.correctInsertionSpaceWord);
+            reversal.setText("Reversal: " + this.correctReversalWord);
+            manual.setText("Manual: ");
         }
     }
     
