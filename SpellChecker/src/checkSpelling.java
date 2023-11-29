@@ -278,17 +278,27 @@ public class checkSpelling {
     private String insertionSpace(String word) {
         char[] arr_word = word.toCharArray();
         for (int i = 1; i < arr_word.length; i++) {
-            char[] insert_arr_word = new char[arr_word.length + 1]; 
+            char[] str1 = new char[i];
+            char[] str2 = new char[arr_word.length-i];
             for (int k = 0; k < i; k++) {
-                insert_arr_word[k] = arr_word[k]; 
+                str1[k] = arr_word[k]; 
             }
-            insert_arr_word[i] = ' ';
-            for (int k = i; k < arr_word.length; k++) {
-                insert_arr_word[k + 1] = arr_word[k];
+            for (int k = 0; k < str2.length; k++) {
+                str2[k] = arr_word[k+i];
             }
-            String str_word = String.valueOf(insert_arr_word).trim().toLowerCase();
-            if (this.dictionary.containsKey(str_word)) {
-                return str_word;
+            String str1_word = String.valueOf(str1).trim().toLowerCase();
+            String str2_word = String.valueOf(str2).trim().toLowerCase();
+            if (this.dictionary.containsKey(str1_word) && this.dictionary.containsKey(str2_word)) {
+                char[] final_words = new char[arr_word.length];
+                for(int k = 0; k<str1.length;k++){
+                    final_words[k] = str1[k];
+                }
+                final_words[str1.length] = ' ';
+                for(int k = 0; k<str2.length;k++){
+                    final_words[k+str1.length+1] = str2[k];
+                }
+                String stringToReturn = String.valueOf(final_words).trim().toLowerCase();
+                return stringToReturn;
             }
             
         }
