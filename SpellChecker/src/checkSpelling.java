@@ -12,8 +12,9 @@ public class checkSpelling {
     private Hashtable<String, String>incorrectWordList;
     private Hashtable<Character, Integer>punctuationIndex; //
     private char punctuationRemoved;
-    private boolean capFirst = true; 
+    private boolean capFirst;
     private String noPunctuationWord;
+    
 
     public checkSpelling(){
         this.textDocument = new String();
@@ -24,6 +25,7 @@ public class checkSpelling {
         this.punctuationIndex = new Hashtable<Character, Integer>();
         this.punctuationRemoved = ' ';
         this.noPunctuationWord = new String();
+        this.capFirst = true;
     }
 
     //returns true if it finds any punctuations
@@ -53,13 +55,16 @@ public class checkSpelling {
             if (check(temp[i])){
                 punctuationIndex.put(temp[i], i);
                 punctuationRemoved = temp[i]; //punctuation is stored
+                break;
             }
             else {
                 edited_temp[i] = temp[i];
             }
-
+        }
+        for (int i = 0; i < word.length(); i++){
             if (temp[i] == '.'){
                 this.capFirst = true;
+                break;
             }
             else {
                 this.capFirst = false;
@@ -70,15 +75,7 @@ public class checkSpelling {
     }
 
     public String addPunctuation(String correctWord) {
-        correctWord = correctWord.substring(0, punctuationIndex.get(punctuationRemoved)) + punctuationRemoved + correctWord.substring(punctuationIndex.get(punctuationRemoved));;
-        
-        if(capFirst == true){
-                                                                                        // Word: Test
-            String s1 = correctWord.substring(0, 1).toUpperCase();  // first letter =  T 
-            String s2 = correctWord.substring(1);                            // After 1st letter = est
-            correctWord = s1.toUpperCase() + s2;                                        // J + avatpoint  
-        }
-
+        correctWord = correctWord.substring(0, punctuationIndex.get(punctuationRemoved)) + punctuationRemoved + correctWord.substring(punctuationIndex.get(punctuationRemoved));
         return correctWord;
     }
 
@@ -92,16 +89,41 @@ public class checkSpelling {
 
     public String getIncorrectWord() {
         String[] textWords = textDocument.split(" ");
-        for (String textWord: textWords) {
-            if (!this.dictionary.containsKey(textWord)){ 
-                this.originalWord = textWord;
-                return this.originalWord;
+        
+        for (int i = 0; i < textWords.length; i++) {
+            if(this.capFirst == true){
+                char temp = textWords[i].charAt(0);
+                System.out.println("original temp is: " + temp);
+                this.capFirst = false;
+                if(temp != textWords[i].toUpperCase().charAt(0)){ //this != This
+                    System.out.println("word is: " + temp + "!=" + textWords[i].toUpperCase().charAt(0));
+                    this.capFirst = false;
+                    this.originalWord = textWords[i];
+                    return this.originalWord; //return this as a capitalization error
+                }
+            }
             
+            if (isPunctuationPresent(textWords[i])){
+                textWords[i]= removePunctuations(textWords[i]);
+            }
+            
+            
+            if (!this.dictionary.containsKey(textWords[i].toLowerCase())){ 
+                this.originalWord = textWords[i];
+                return this.originalWord;
             }
         }
+
         return null;    
     }
 
+    public String capitalization(String word) {                              // test
+        String s1 = word.substring(0, 1).toUpperCase();  // first letter t
+        String s2 = word.substring(1);                            // After 1st letter est
+        word = s1.toUpperCase() + s2;                                        // T + est
+        return word;
+    }
+    
 
     // public String findCorrections(String focusedWord) {
     //     boolean checkCap = false;
@@ -167,7 +189,6 @@ public class checkSpelling {
                 String str_word = String.valueOf(edited_arr_word); 
                 str_word = str_word.toLowerCase();
                 if(this.dictionary.containsKey(str_word)){ 
-                    str_word = addPunctuation(str_word);
                     return str_word; 
                 }
             }

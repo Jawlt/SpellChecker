@@ -87,8 +87,9 @@ public class Dictionary extends userDictionary{
         //System.out.println(test.omission("aplpe"));
         //System.out.println(test.insertionSpace("isa"));
 
-        System.out.println(test.getSubstitution("code."));
-        System.out.println(test.addPunctuation(test.removePunctuations("code")));
+        System.out.println(test.removePunctuations("assignment."));
+        System.out.println(test.addPunctuation("assignment"));
+        //System.out.println(test.addPunctuation(test.removePunctuations("code")));
         //System.out.println(test.addPunctuation(test.removePunctuations("boy-cot")));
     }
 }
