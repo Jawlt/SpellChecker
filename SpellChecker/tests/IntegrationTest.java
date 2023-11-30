@@ -10,7 +10,6 @@ class IntegrationTest {
     @Test
     public void OutputofCombiningUserandTestDictionary() {
 
-        checkSpelling corrections = new checkSpelling();
         Dictionary dict = new Dictionary();
         Hashtable<String, String> testDict = dict.getDictionary();
         Hashtable<String, String> userDict = dict.getUserDictionary();
