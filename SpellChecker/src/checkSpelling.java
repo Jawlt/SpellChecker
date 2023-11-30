@@ -298,21 +298,21 @@ public class checkSpelling {
     }
     
     private String omission(String word) {
-        char[] arr_word = word.toCharArray();
-        for(int k=0;k<arr_word.length;k++){ 
-            char[] edited_arr_word = new char[arr_word.length-1]; 
+        char[] arr_word = word.toCharArray(); //convert string word to array
+        for(int k=0;k<arr_word.length;k++){  //iterate through each letter in word
+            char[] edited_arr_word = new char[arr_word.length-1];  //create new array one lement smaller than word
             int j = 0;
-            for(int i=0;i<arr_word.length;i++){
+            for(int i=0;i<arr_word.length;i++){//shift all letters after index back one
                 if(i != k){
                     edited_arr_word[j++] = arr_word[i];
                 }
             }
-            String str_word = String.valueOf(edited_arr_word).trim(); 
-            if(this.dictionary.containsKey(str_word.toLowerCase())) { 
-                return str_word;
+            String str_word = String.valueOf(edited_arr_word).trim();  //convert to string and trim
+            if(this.dictionary.containsKey(str_word.toLowerCase())) { //index dictionary
+                return str_word; //return correction
             }
         }
-        return "none"; 
+        return "none"; //if no correction found return 'none'
     }
     /**
      * getInsertion method applies remove and insert punctuation methods 
@@ -339,25 +339,25 @@ public class checkSpelling {
     }
 
     private String insertion(String word) {
-        char alphabet[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
-        char[] arr_word = word.toCharArray();
-        for (int i = 0; i < arr_word.length + 1; i++) {
-            for (int j = 0; j < alphabet.length; j++) {
-                char[] insert_arr_word = new char[arr_word.length + 1]; 
-                for (int k = 0; k < i; k++) {
+        char alphabet[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; //create char[] with all letter in alphabet
+        char[] arr_word = word.toCharArray();//convert string word to char[]
+        for (int i = 0; i < arr_word.length + 1; i++) { //for loop which iterates one more time than the length of arr_word
+            for (int j = 0; j < alphabet.length; j++) { //for each letter in aplhabet
+                char[] insert_arr_word = new char[arr_word.length + 1]; //create an array with one more element than arr_word
+                for (int k = 0; k < i; k++) { //copy arr_word beofre index i to new array
                     insert_arr_word[k] = arr_word[k]; 
                 }
-                insert_arr_word[i] = alphabet[j];
-                for (int k = i; k < arr_word.length; k++) {
+                insert_arr_word[i] = alphabet[j]; //add new character
+                for (int k = i; k < arr_word.length; k++) { //add letters form arr_word following index i
                     insert_arr_word[k + 1] = arr_word[k];
                 }
-                String str_word = String.valueOf(insert_arr_word).trim();
-                if (this.dictionary.containsKey(str_word.toLowerCase())) {
-                    return str_word;
+                String str_word = String.valueOf(insert_arr_word).trim(); //convert to string and trim
+                if (this.dictionary.containsKey(str_word.toLowerCase())) { //index dictionary
+                    return str_word; //return correction
                 }
             }
         }
-        return "none";
+        return "none"; //if no corrections found, return 'none'
     }
     /**
      * getInsertionSpace method applies remove and insert punctuation methods 
