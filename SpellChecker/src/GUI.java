@@ -727,7 +727,7 @@ public class GUI extends Dictionary implements ActionListener {
           }
         }
 
-
+        //add other counters in and put into textpanel
     }
     
 
