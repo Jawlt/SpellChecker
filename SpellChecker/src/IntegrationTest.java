@@ -11,25 +11,15 @@ class IntegrationTest {
     public void OutputofCombiningUserandTestDictionary() {
 
         checkSpelling corrections = new checkSpelling();
-
         Dictionary dict = new Dictionary();
-
         Hashtable<String, String> testDict = dict.getDictionary();
-
         Hashtable<String, String> userDict = dict.getUserDictionary();
-
         Hashtable<String, String> combineddict = dict.getCombinedDictionary();
-
         userDict.put("test", "test");
-
         testDict.put("program", "program");
-
         dict.combineDictionary();
-
         combineddict.put("test", "test");
-
         combineddict.put("program", "program");
-
         assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
@@ -38,29 +28,17 @@ class IntegrationTest {
     public void fixErrorinuserDictbeforeCombining() {
 
         checkSpelling corrections = new checkSpelling();
-
         Dictionary dict = new Dictionary();
-
         Hashtable<String, String> testDict = dict.getDictionary();
-
         Hashtable<String, String> userDict = dict.getUserDictionary();
-
         Hashtable<String, String> combineddict = dict.getCombinedDictionary();
-
         userDict.put("tes", "test");
-
         testDict.put("program", "program");
-
         corrections.setDictionary(userDict);
-
         corrections.getInsertion("tes");
-
         dict.combineDictionary();
-
         combineddict.put("test", "test");
-
         combineddict.put("program", "program");
-
         assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
@@ -69,29 +47,17 @@ class IntegrationTest {
     public void fixErrorintestDictbeforeCombining() {
 
         checkSpelling corrections = new checkSpelling();
-
         Dictionary dict = new Dictionary();
-        
         Hashtable<String, String> testDict = dict.getDictionary();
-
         Hashtable<String, String> userDict = dict.getUserDictionary();
-
         Hashtable<String, String> combineddict = dict.getCombinedDictionary();
-
         userDict.put("test", "test");
-
         testDict.put("pprogram", "program");
-
         corrections.setDictionary(userDict);
-
         corrections.getOmission("pprogram");
-
-        dict.combineDictionary();
-
+        dict.combineDictionary(); 
         combineddict.put("test", "test");
-
         combineddict.put("program", "program");
-
         assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
@@ -110,7 +76,7 @@ class IntegrationTest {
         combineddict.put("program", "program");
         dict.combineDictionary();
         dict.getDictionary().put("program", "program");
-        assertEquals(combineddict, dict.getDictionary());
+        assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
 

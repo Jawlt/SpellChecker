@@ -19,38 +19,38 @@ public class SpellCheckingTest {
     }
 
     @Test
-    public void testOmission() {
-        dictionary.put("hell", "hello"); // Assuming "hell" is the omitted version of "hello"
-        spellChecker.setDictionary(dictionary);
-        assertEquals("hello", spellChecker.omission("hell"));
+    public void testInsertion() {
+        //dictionary.put("hell", "helloo"); // Assuming "hell" is the omitted version of "hello"
+        //spellChecker.setDictionary(dictionary);
+        assertEquals("hello", spellChecker.getInsertion("hell"));
     }
 
     @Test
-    public void testInsertion() {
-        dictionary.put("hhello", "hello"); // Assuming "hhello" is the inserted version of "hello"
-        spellChecker.setDictionary(dictionary);
-        assertEquals("hello", spellChecker.insertion("hhello"));
+    public void testOmission() {
+        //dictionary.put("hhello", "hello"); // Assuming "hhello" is the inserted version of "hello"
+        //spellChecker.setDictionary(dictionary);
+        assertEquals("hello", spellChecker.getOmission("hhello"));
     }
 
     @Test
     public void testSubstitution() {
-        dictionary.put("jello", "hello"); // Assuming "jello" is the substituted version of "hello"
-        spellChecker.setDictionary(dictionary);
-        assertEquals("hello", spellChecker.substitution("jello"));
+        //dictionary.put("jello", "hello"); // Assuming "jello" is the substituted version of "hello"
+        //spellChecker.setDictionary(dictionary);
+        assertEquals("hello", spellChecker.getSubstitution("jello"));
     }
 
     @Test
     public void testReversal() {
-        dictionary.put("ehllo", "hello"); // Assuming "ehllo" is the reversed version of "hello"
-        spellChecker.setDictionary(dictionary);
-        assertEquals("hello", spellChecker.reversal("ehllo"));
+        //dictionary.put("ehllo", "hello"); // Assuming "ehllo" is the reversed version of "hello"
+        //spellChecker.setDictionary(dictionary);
+        assertEquals("hello", spellChecker.getReversal("ehllo"));
     }
 
     @Test
     public void testInsertionSpace() {
-        dictionary.put("he llo", "hello"); // Assuming "he llo" is the spaced version of "hello"
-        spellChecker.setDictionary(dictionary);
-        assertEquals("hello", spellChecker.insertionSpace("he llo"));
+        //dictionary.put("he llo", "hello"); // Assuming "he llo" is the spaced version of "hello"
+        //spellChecker.setDictionary(dictionary);
+        assertEquals("hello world", spellChecker.getInsertionSpace("helloworld"));
     }
 
 }
