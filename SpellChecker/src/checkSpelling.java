@@ -1,16 +1,15 @@
 /**
- * this class is is used to generate possible corrections for misspelled words
+ * This class is is used to generate possible corrections for misspelled words
  * @author Ross Cameron
  */
 
- // 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
 public class checkSpelling {
-
+    //initialize private variable to be used in later methods
     private String correctedWord;
     private String originalWord;
     private Hashtable<String, String>dictionary;
@@ -22,7 +21,10 @@ public class checkSpelling {
     private boolean capFirst;
     private String noPunctuationWord;
     
-
+    /**
+     * class constructor method:
+     * sets initial value for necessary variables
+     */
     public checkSpelling(){
         this.textDocument = new String();
         this.dictionary = new Hashtable<String, String>();
@@ -35,12 +37,25 @@ public class checkSpelling {
         this.noPunctuationWord = new String();
         this.capFirst = true;
     }
-
-    //returns true if it finds any punctuations
+    
+    /**
+     * check method returns true if input ch (type char) is a punctuation mark
+     * @param ch a character from a string which another method is checking
+     * @return boolean
+     */
     public boolean check(char ch) {
         return "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".indexOf(ch) != -1;
     }
     
+    /**
+     * isPunctuationPresent method check if string contains punctuation
+     * <p>
+     * iterates over characters in String word and utilizes check() method 
+     * to determine if any character in the String is a punctation mark
+     * <p>
+     * @param word is the the word to be checked against dictionary from user text
+     * @return boolean
+     */
     public boolean isPunctuationPresent(String word){
         char[] temp = word.toCharArray();
         boolean isPresent = false;
@@ -56,6 +71,15 @@ public class checkSpelling {
         return isPresent;
     }
 
+    /**
+     * removePunctuations method stores and removes punctuation mark from string
+     * <p>
+     * method removes punctuation by finding the punctuation the moving each of 
+     * the following characters backwards
+     * <p>
+     * @param word 
+     * @return String new version of word with no punctuation
+     */
     public String removePunctuations(String word) {
         char[] temp = word.toCharArray();
         char[] edited_temp = new char[temp.length]; 
@@ -88,19 +112,43 @@ public class checkSpelling {
         return noPunctuationWord;
     }
 
+    /**
+     * addPunctuation method reinserts punctuation into same spot in correct word
+     * <p>
+     * iterates over characters in String word and utilizes check() method 
+     * to determine if any character in the String is a punctation mark
+     * <p>
+     * @param correctWord is the correctly spelled word 
+     * @return String is the correctly spelled word with punctuation added back
+     */
     public String addPunctuation(String correctWord) {
         correctWord = correctWord.substring(0, punctuationIndex.get(punctuationRemoved)) + punctuationRemoved + correctWord.substring(punctuationIndex.get(punctuationRemoved));
         return correctWord;
     }
 
+    /**
+     * setTextDoc simple setter method used to initialize the user's text document
+     * @param textDoc String containing text document 
+     * @return void
+     */
     public void setTextDoc(String textDoc){
         this.textDocument = textDoc;
     }
 
+    /**
+     * setDictionary simple setter method used to initialize the dictionary
+     * @param dictionary Hashtable<String, String> containing dictionary
+     * @return void
+     */
     public void setDictionary(Hashtable<String, String> dictionary){
         this.dictionary = dictionary;
     }
 
+    /**
+     * setUserDictionary simple setter method used to initialize the user dictionary
+     * @param userDictionary Hashtable<String, String> containing user dictionary
+     * @return void
+     */
     public void setUserDictionary(Hashtable<String, String> userDictionary){
         this.userDictionary = userDictionary;
     }
@@ -162,6 +210,10 @@ public class checkSpelling {
 
                 if(i < textWords.length-1){
                     if(textWords[i].toLowerCase().equals(textWords[i+1].toLowerCase())){
+                        if(this.userDictionary.containsKey(textWords[i] + " " + textWords[i+1])){
+                            this.capFirst = false;
+                            continue;
+                        } 
                         this.originalWord = textWords[i] + " " + textWords[i+1];
                         this.capFirst = false;
                         return this.originalWord;
@@ -173,6 +225,7 @@ public class checkSpelling {
         return null;    
     }
 
+
     public String capitalization(String word) {                              // test
         String s1 = word.substring(0, 1).toUpperCase();  // first letter t
         String s2 = word.substring(1);                            // After 1st letter est
@@ -180,7 +233,17 @@ public class checkSpelling {
         return word;
     }
     
-    
+    /**
+     * getSubstitution method applies remove and insert punctuation methods 
+     * before and after finding correct word respectively
+    * <p>
+     * this is done to avoid indexing the dictionary with a string 
+     * that is spelled corretly but contains characters which are 
+     * not present in dictionary
+     * <p>
+     * @param word is the incorrectly spelled word
+     * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
+     */
     public String getSubstitution(String word) {
         if (isPunctuationPresent(word)){
             word = removePunctuations(word);
@@ -209,7 +272,18 @@ public class checkSpelling {
         }
         return "none";
     }
-    
+
+    /**
+     * getOmission method applies remove and insert punctuation methods 
+     * before and after finding correct word respectively
+     * <p>
+     * this is done to avoid indexing the dictionary with a string 
+     * that is spelled corretly but contains characters which are 
+     * not present in dictionary
+     * <p>
+     * @param word is the incorrectly spelled word
+     * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
+     */
     public String getOmission(String word) {
         if (isPunctuationPresent(word)){
             word = removePunctuations(word);
@@ -240,7 +314,17 @@ public class checkSpelling {
         }
         return "none"; 
     }
-
+    /**
+     * getInsertion method applies remove and insert punctuation methods 
+     * before and after finding correct word respectively
+     * <p>
+     * this is done to avoid indexing the dictionary with a string 
+     * that is spelled corretly but contains characters which are 
+     * not present in dictionary
+     * <p>
+     * @param word is the incorrectly spelled word
+     * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
+     */
     public String getInsertion(String word) {
         if (isPunctuationPresent(word)){
             word = removePunctuations(word);
@@ -275,12 +359,22 @@ public class checkSpelling {
         }
         return "none";
     }
-
+    /**
+     * getInsertionSpace method applies remove and insert punctuation methods 
+     * before and after finding correct word respectively
+     * <p>
+     * this is done to avoid indexing the dictionary with a string 
+     * that is spelled corretly but contains characters which are 
+     * not present in dictionary
+     * <p>
+     * @param word is the incorrectly spelled word
+     * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
+     */
     public String getInsertionSpace(String word) {
-        if (isPunctuationPresent(word)){
-            word = removePunctuations(word);
-            word = insertionSpace(word);
-            word = addPunctuation(word);
+        if (isPunctuationPresent(word)){ // if punctuation found in word
+            word = removePunctuations(word); //remove punctuation
+            word = insertionSpace(word); // check for corrections
+            word = addPunctuation(word); // reinsert punctuation
             return word;
         }
         else {
@@ -290,7 +384,7 @@ public class checkSpelling {
     }
     
     public String insertionSpace(String word) {
-        char[] arr_word = word.toCharArray();
+        char[] arr_word = word.toCharArray(); // convert string word to char[] to allow
         for (int i = 1; i < arr_word.length; i++) {
             char[] str1 = new char[i];
             char[] str2 = new char[arr_word.length-i];
@@ -319,7 +413,17 @@ public class checkSpelling {
         return "none";
     }
     
-    
+    /**
+     * getReversal method applies remove and insert punctuation methods 
+     * before and after finding correct word respectively
+     * <p>
+     * this is done to avoid indexing the dictionary with a string 
+     * that is spelled corretly but contains characters which are 
+     * not present in dictionary
+     * <p>
+     * @param word is the incorrectly spelled word
+     * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
+     */
     public String getReversal(String word) {
         if (isPunctuationPresent(word)){
             word = removePunctuations(word);
