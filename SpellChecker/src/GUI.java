@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 
 import javax.swing.JButton;
@@ -22,6 +25,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.html.HTMLWriter;
+
+import org.jsoup.*;
+import org.jsoup.helper.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
 
 // GUI(child class) inherits methods from Dictionary(super class)
 public class GUI extends Dictionary implements ActionListener {
@@ -64,6 +73,7 @@ public class GUI extends Dictionary implements ActionListener {
 
     // text area + scroll bar
     private JTextPane textPane;
+    private JTextPane userDictionaryTextPane;
     private JScrollPane scrollPane;
 
     // updated text pane
@@ -88,6 +98,7 @@ public class GUI extends Dictionary implements ActionListener {
         this.helpButton = new JButton("Help");
         this.exitButton = new JButton("Exit");
         this.textPane = new JTextPane();
+        this.userDictionaryTextPane = new JTextPane();
         this.scrollPane = new JScrollPane(textPane);
         this.userFrame = new JFrame();
 
@@ -134,7 +145,7 @@ public class GUI extends Dictionary implements ActionListener {
         // Display Text Document on textPanel
         textPane.setEditable(false);
 
-        textPane.setText(textDocument);
+        textPane.setText(this.textDocument);
         scrollPane.setBounds(30, 100, 800, 910);
         
         // Adding panels and buttons to frame
@@ -176,12 +187,13 @@ public class GUI extends Dictionary implements ActionListener {
             }
             
             this.textDocument = fileContent.toString();
+            this.textDocument = Jsoup.parse(this.textDocument).text();
             textPane.setText(this.textDocument);
             scrollPane.setBounds(30, 100, 800, 910);
             setTextDoc(textDocument);
 
             // incorrect word and related buttons
-            originalWord = getIncorrectWord();
+            this.originalWord = getIncorrectWord();
             this.incorrectWord = new JButton(originalWord); 
 
             // Get the StyledDocument of the JTextPane
@@ -208,7 +220,7 @@ public class GUI extends Dictionary implements ActionListener {
             this.correctInsertionSpaceWord = getInsertionSpace(this.originalWord);
             this.correctReversalWord = getReversal(this.originalWord);
             this.correctCapitalizedWord = capitalization(this.originalWord);
-            this.correctManualWord = JOptionPane.showInputDialog("Enter word to replace with: ");
+
             //add word to error buttons
             this.substitution = new JButton("Substitution: " + this.correctSubstitutionWord);
             this.omission = new JButton("Omission: " + this.correctOmissionWord);
@@ -288,7 +300,7 @@ public class GUI extends Dictionary implements ActionListener {
             BufferedWriter outFile = null;
             try {
             outFile = new BufferedWriter(new FileWriter(fileName));
-            textPane.write(outFile);   // *** here: ***
+            this.textPane.write(outFile);   // *** here: ***
             } 
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -306,8 +318,8 @@ public class GUI extends Dictionary implements ActionListener {
         }
 
         if(e.getSource() == viewUserDictionary){
-            textPane.setEditable(false);
-            textPane.setText(userDictionarytoString());
+            userDictionaryTextPane.setEditable(false);
+            userDictionaryTextPane.setText(userDictionarytoString());
 
             userFrame.setTitle("User Dictionary");
             userFrame.setBounds(0, 0, 500, 500);
@@ -316,7 +328,7 @@ public class GUI extends Dictionary implements ActionListener {
             removeUserDictionaryWord.setBounds(330, 10, 150, 30);
 
             userFrame.add(removeUserDictionaryWord);
-            userFrame.add(textPane);
+            userFrame.add(userDictionaryTextPane);
             
             userFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             userFrame.setVisible(true);
@@ -325,10 +337,9 @@ public class GUI extends Dictionary implements ActionListener {
         if(e.getSource() == removeUserDictionaryWord){
             String wordToRemove = JOptionPane.showInputDialog("Enter Word to Remove");
             removeWordUser(wordToRemove);
-            textPane.setText(userDictionarytoString());
+            userDictionaryTextPane.setText(userDictionarytoString());
             removeWordDictionary(wordToRemove); //remove the word from the combined dictionary
-            setTextDoc(this.textPane.getText());
-            findNextError();
+            combineDictionary();
         }
 
         if(e.getSource() == spellCheck){
@@ -436,7 +447,7 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == substitution){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctSubstitutionWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctSubstitutionWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -458,7 +469,7 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == omission){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctOmissionWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctOmissionWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -480,7 +491,7 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == insertion){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctInsertionWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctInsertionWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -502,7 +513,7 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == insertionSpace){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctInsertionSpaceWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctInsertionSpaceWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -524,7 +535,7 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == reversal){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctReversalWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctReversalWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -546,7 +557,7 @@ public class GUI extends Dictionary implements ActionListener {
         } 
 
         if(e.getSource() == capitalize){
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctCapitalizedWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctCapitalizedWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -570,7 +581,7 @@ public class GUI extends Dictionary implements ActionListener {
         if(e.getSource() == manual){
             this.correctManualWord = JOptionPane.showInputDialog("Enter word to replace with: ");
             
-            this.textDocument = this.textDocument.replace(this.originalWord, this.correctManualWord);
+            this.textDocument = this.textDocument.replaceFirst(this.originalWord, this.correctManualWord);
             textPane.setText(this.textDocument);
 
             // Get the StyledDocument of the JTextPane
@@ -594,8 +605,13 @@ public class GUI extends Dictionary implements ActionListener {
         // if user presses addToDictionary button
         // for ignoreError button, add to user dictonary as well. Since if the user wants to ignore for one word, ignore for the rest as well
         if(e.getSource() == addToDictionary || e.getSource() == ignoreError){
-            addWordUser(originalWord);
+            String str = this.originalWord;
+            if(isPunctuationPresent(this.originalWord)){
+                str = removePunctuations(this.originalWord);
+            }
+            addWordUser(str);
             combineDictionary();
+            userDictionaryTextPane.setText(userDictionarytoString());
             findNextError();
         } 
         
@@ -606,25 +622,9 @@ public class GUI extends Dictionary implements ActionListener {
         setTextDoc(this.textDocument);
         
         // gets the next incorrect word
-        this.originalWord = getIncorrectWord();
         
-        // Get the StyledDocument of the JTextPane
-        StyledDocument doc = textPane.getStyledDocument();
-            
-        // Define a style
-        Style style = textPane.addStyle("Red Style", null);
-        StyleConstants.setForeground(style, Color.RED);
-
-        // color in original error word
-        String wordToColor = this.originalWord;
-
-        // find index of word to apply style
-        int offset = this.textDocument.indexOf(wordToColor);
-        int length = wordToColor.length();
-        if (offset != -1) {
-            doc.setCharacterAttributes(offset, length, style, false);
-        }
-
+        this.originalWord = getIncorrectWord();
+        System.out.println("word:" + this.originalWord);
         // if no more errors
         if (this.originalWord == null) {
             incorrectWord.setVisible(false);
@@ -639,11 +639,28 @@ public class GUI extends Dictionary implements ActionListener {
             ignoreError.setVisible(false);
         } 
         else {
+
+            // Get the StyledDocument of the JTextPane
+            StyledDocument doc = textPane.getStyledDocument();
+                
+            // Define a style
+            Style style = textPane.addStyle("Red Style", null);
+            StyleConstants.setForeground(style, Color.RED);
+
+            // color in original error word
+            String wordToColor = this.originalWord;
+
+            // find index of word to apply style
+            int offset = this.textDocument.indexOf(wordToColor);
+            int length = wordToColor.length();
+            if (offset != -1) {
+                doc.setCharacterAttributes(offset, length, style, false);
+            }
             //find corrected word
             // this.correctWord = findCorrections(this.originalWord);
             
             // update the buttons for the next error
-            incorrectWord.setText(originalWord);
+            incorrectWord.setText(this.originalWord);
             this.correctSubstitutionWord = getSubstitution(this.originalWord);
             this.correctOmissionWord = getOmission(this.originalWord);
             this.correctInsertionWord = getInsertion(this.originalWord);
@@ -656,7 +673,7 @@ public class GUI extends Dictionary implements ActionListener {
             insertion.setText("Insertion: " + this.correctInsertionWord);
             insertionSpace.setText("InsertionSpace: " + this.correctInsertionSpaceWord);
             reversal.setText("Reversal: " + this.correctReversalWord);
-            manual.setText("Manual: ");
+            manual.setText("Manual Correction");
             capitalize.setText("Capitalization: " + this.correctCapitalizedWord);
         }
     }

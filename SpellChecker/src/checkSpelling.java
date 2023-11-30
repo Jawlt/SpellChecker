@@ -8,6 +8,7 @@ public class checkSpelling {
     private String correctedWord;
     private String originalWord;
     private Hashtable<String, String>dictionary;
+    private Hashtable<String, String>userDictionary;
     private String textDocument;
     private Hashtable<String, String>incorrectWordList;
     private Hashtable<Character, Integer>punctuationIndex; //
@@ -19,6 +20,7 @@ public class checkSpelling {
     public checkSpelling(){
         this.textDocument = new String();
         this.dictionary = new Hashtable<String, String>();
+        this.userDictionary = new Hashtable<String, String>();
         this.correctedWord = new String();
         this.originalWord = new String();
         this.incorrectWordList = new Hashtable<String, String>();
@@ -55,14 +57,20 @@ public class checkSpelling {
             if (check(temp[i])){
                 punctuationIndex.put(temp[i], i);
                 punctuationRemoved = temp[i]; //punctuation is stored
+
+                for(int j = i; j < word.length()-1; j++){
+                    edited_temp[j] = temp[j+1];
+                }
                 break;
             }
             else {
+                //app_l  
                 edited_temp[i] = temp[i];
             }
         }
+        
         for (int i = 0; i < word.length(); i++){
-            if (temp[i] == '.'){
+            if (temp[i] == '.' || temp[i] == '!' || temp[i] == '?'){
                 this.capFirst = true;
                 break;
             }
@@ -87,33 +95,70 @@ public class checkSpelling {
         this.dictionary = dictionary;
     }
 
+    public void setUserDictionary(Hashtable<String, String> userDictionary){
+        this.userDictionary = userDictionary;
+    }
+
     public String getIncorrectWord() {
         String[] textWords = textDocument.split(" ");
         
-        for (int i = 0; i < textWords.length; i++) {
+        for (int i = 0; i < textWords.length; i++) { 
+
             if(this.capFirst == true){
                 char temp = textWords[i].charAt(0);
-                System.out.println("original temp is: " + temp);
                 this.capFirst = false;
                 if(temp != textWords[i].toUpperCase().charAt(0)){ //this != This
-                    System.out.println("word is: " + temp + "!=" + textWords[i].toUpperCase().charAt(0));
                     this.capFirst = false;
                     this.originalWord = textWords[i];
                     return this.originalWord; //return this as a capitalization error
                 }
             }
-            
+
             if (isPunctuationPresent(textWords[i])){
-                textWords[i]= removePunctuations(textWords[i]);
+                textWords[i] = removePunctuations(textWords[i]);
+
+                //DoG -> DoG
+                if(this.userDictionary.containsKey(textWords[i])){
+                    this.capFirst = false;
+                    continue;
+                }
+
+                if(!this.dictionary.containsKey(textWords[i].toLowerCase())){
+                    if(punctuationRemoved == '-'){
+                        this.originalWord = addPunctuation(textWords[i]);
+                        this.capFirst = false;
+                        return this.originalWord;
+                    }
+                    this.originalWord = textWords[i];
+                    return this.originalWord;
+                }
             }
+
+            //DoG -> Dog
+            if(this.userDictionary.containsKey(textWords[i])){
+                this.capFirst = false;
+                continue;
+            }
+
+            //assignment DoG -> Dog
+            String word = textWords[i];
+            String word2 = word.substring(0, 1).toLowerCase() + word.substring(1); 
             
-            
-            if (!this.dictionary.containsKey(textWords[i].toLowerCase())){ 
+            if (!this.dictionary.containsKey(word2)){
                 this.originalWord = textWords[i];
+                this.capFirst = false;
                 return this.originalWord;
             }
-        }
 
+            if(i < textWords.length-1){
+                if(textWords[i].toLowerCase().equals(textWords[i+1].toLowerCase())){
+                    this.originalWord = textWords[i] + " " + textWords[i+1];
+                    this.capFirst = false;
+                    return this.originalWord;
+                }
+            }
+            
+        }
         return null;    
     }
 
@@ -123,47 +168,6 @@ public class checkSpelling {
         word = s1.toUpperCase() + s2;                                        // T + est
         return word;
     }
-    
-
-    // public String findCorrections(String focusedWord) {
-    //     boolean checkCap = false;
-    //     String returnWord = "none";
-    //     String lowerCaseWord = focusedWord.toLowerCase();
-    //     if(!(this.dictionary.containsKey(lowerCaseWord))){
-    //         String ins_space = insertionSpace(lowerCaseWord);
-    //         String sub = substitution(lowerCaseWord);
-    //         String omi = omission(lowerCaseWord);
-    //         String ins = insertion(lowerCaseWord);
-    //         String rev = reversal(lowerCaseWord);
-    //         if(ins_space!="none"){
-    //             returnWord = ins_space;
-    //         }
-    //         else if(rev!="none"){
-    //             returnWord = rev;
-    //         }
-    //         else if(sub!="none"){
-    //             returnWord = sub;
-    //         }
-    //         else if(ins!="none"){
-    //             returnWord = ins;
-    //         }
-    //         else if(omi!="none"){
-    //             returnWord = omi;
-    //         }
-    //     }
-        
-    //     char alphabet[]= {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-    //     char[] arr_focusedWord = focusedWord.toCharArray();
-    //     for(int i = 0; i<alphabet.length; i++){
-    //         if(arr_focusedWord[0] == alphabet[i]){
-    //             char[] arr_returnWord = returnWord.toCharArray();
-    //             arr_returnWord[0] = Character.toUpperCase(arr_returnWord[0]);
-    //         }
-    //     }
-            
-        
-    //     return returnWord;
-    // }
     
     
     public String getSubstitution(String word) {
@@ -275,7 +279,7 @@ public class checkSpelling {
         }
     }
     
-    private String insertionSpace(String word) {
+    public String insertionSpace(String word) {
         char[] arr_word = word.toCharArray();
         for (int i = 1; i < arr_word.length; i++) {
             char[] str1 = new char[i];
@@ -289,7 +293,7 @@ public class checkSpelling {
             String str1_word = String.valueOf(str1).trim().toLowerCase();
             String str2_word = String.valueOf(str2).trim().toLowerCase();
             if (this.dictionary.containsKey(str1_word) && this.dictionary.containsKey(str2_word)) {
-                char[] final_words = new char[arr_word.length];
+                char[] final_words = new char[arr_word.length+1];
                 for(int k = 0; k<str1.length;k++){
                     final_words[k] = str1[k];
                 }
@@ -304,7 +308,8 @@ public class checkSpelling {
         }
         return "none";
     }
-
+    
+    
     public String getReversal(String word) {
         if (isPunctuationPresent(word)){
             word = removePunctuations(word);
@@ -320,7 +325,7 @@ public class checkSpelling {
 
     private String reversal(String word) {
         char[] arr_word = word.toCharArray();
-        for(int i=0;i<((arr_word.length)-1);i++){ 
+        for(int i = 0; i < ((arr_word.length)-1); i++){ 
             char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 
             char temp; 
             temp = edited_arr_word[i];
@@ -332,7 +337,6 @@ public class checkSpelling {
             if (this.dictionary.containsKey(str_word)) {
                 return str_word; 
             }
-
         }
         return "none";
     }

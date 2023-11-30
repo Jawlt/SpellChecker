@@ -11,6 +11,11 @@ import java.io.IOException;
 
 import javax.swing.JTextPane;
 
+import org.jsoup.*;
+import org.jsoup.helper.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
+
 class TextFileDropTargetListener extends DropTargetAdapter {
     private JTextPane textPane;
 
@@ -34,7 +39,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
                 // Process the first file in the dropped files
                 if (!droppedFiles.isEmpty() && droppedFiles.get(0) instanceof File) {
                     File file = (File) droppedFiles.get(0);
-                    if (file.isFile() && file.getName().endsWith(".txt")) {
+                    if (file.isFile() && (file.getName().endsWith(".txt") || file.getName().endsWith(".html"))) {
                         readFile(file);
                     }
                 }
@@ -48,8 +53,21 @@ class TextFileDropTargetListener extends DropTargetAdapter {
     }
 
     private void readFile(File file) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        textPane.read(reader, null);
-        reader.close();
+        StringBuilder fileContent = new StringBuilder();
+        try {
+            // Read the file
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                fileContent.append(line).append("\n");   // You can change this to display in a GUI component
+            }
+            reader.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        String textDocument = fileContent.toString();
+        textDocument = Jsoup.parse(textDocument).text();
+        textPane.setText(textDocument);
     }
 }

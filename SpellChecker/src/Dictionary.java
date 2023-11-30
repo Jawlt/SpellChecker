@@ -2,6 +2,13 @@ import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 
+import javax.swing.text.Document;
+import java.io.IOException;
+import org.jsoup.*;
+import org.jsoup.helper.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
+
 // Dictionary(child class) inherits methods from userDictionary(super class)
 public class Dictionary extends userDictionary{
     private Hashtable<String, String> dictionary;
@@ -64,7 +71,8 @@ public class Dictionary extends userDictionary{
                 combinedDictionary.put(key, value);
             } 
         }
-        setDictionary(combinedDictionary);
+        setDictionary(this.combinedDictionary);
+        setUserDictionary(this.userDictionary);
     }
     
     //removes word from userDictionary if dictionary contains word
@@ -83,13 +91,17 @@ public class Dictionary extends userDictionary{
         //System.out.println(test.reversal("phtoo"));
         //System.out.println(test.substitution("aplpe"));
         
-        //System.out.println(test.insertion("aplpe"));
+        
+        System.out.println(test.getReversal("co-workre"));
         //System.out.println(test.omission("aplpe"));
         //System.out.println(test.insertionSpace("isa"));
-
-        System.out.println(test.removePunctuations("assignment."));
-        System.out.println(test.addPunctuation("assignment"));
+        //System.out.println(test.insertionSpace("notworking"));
+        //System.out.println(test.addPunctuation("assignment"));
         //System.out.println(test.addPunctuation(test.removePunctuations("code")));
-        //System.out.println(test.addPunctuation(test.removePunctuations("boy-cot")));
+        //System.out.println(test.addPunctuation(test.removePunctuations("co-wrrker")));
+
+        String htmlString = "<html><body><p>Hello, World!</p></body></html>";
+        Document htmldoc = Jsoup.parse(htmlString);
+        String textContent = htmldoc.text();
     }
 }
