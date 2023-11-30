@@ -225,11 +225,15 @@ public class checkSpelling {
         return null;    
     }
 
-
-    public String capitalization(String word) {                              // test
-        String s1 = word.substring(0, 1).toUpperCase();  // first letter t
-        String s2 = word.substring(1);                            // After 1st letter est
-        word = s1.toUpperCase() + s2;                                        // T + est
+     /**
+     * capitalization method take in string and capitalizes first character
+     * @param word is the lowercase word
+     * @return String is spelled the same as input but the first letter is capitalized
+     */
+    public String capitalization(String word) {                 // test
+        String s1 = word.substring(0, 1).toUpperCase();        // first letter t
+        String s2 = word.substring(1);                        // After 1st letter est
+        word = s1.toUpperCase() + s2;                        // T + est
         return word;
     }
     
@@ -245,10 +249,10 @@ public class checkSpelling {
      * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
      */
     public String getSubstitution(String word) {
-        if (isPunctuationPresent(word)){
-            word = removePunctuations(word);
-            word = substitution(word);
-            word = addPunctuation(word);
+        if (isPunctuationPresent(word)){ // if punctuation found in word
+            word = removePunctuations(word); //remove punctuation
+            word = substitution(word); // check for corrections
+            word = addPunctuation(word); // reinsert punctuation
             return word;
         }
         else {
@@ -256,6 +260,11 @@ public class checkSpelling {
             return word;
         }
     }
+    /**
+     * substitution method swaps the letter at index i for each letter in aplhabet (each time indexing dictionary) before moving onto the next index (i)
+     * @param word is the correctly spelled word 
+     * @return String is the correctly spelled word or 'none'
+     */
     private String substitution(String word){
         char alphabet[]= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; // create alphabet array
         char[] arr_word = word.toCharArray(); //convert string char[]
@@ -296,7 +305,11 @@ public class checkSpelling {
             return word;
         }
     }
-    
+    /**
+     * omission method removes letter at index i from the word, then indexes dictionary before iterating to the next index
+     * @param word is the correctly spelled word 
+     * @return String is the correctly spelled word or 'none'
+     */
     private String omission(String word) {
         char[] arr_word = word.toCharArray(); //convert string word to array
         for(int k=0;k<arr_word.length;k++){  //iterate through each letter in word
@@ -337,7 +350,14 @@ public class checkSpelling {
             return word;
         }
     }
-
+    /**
+     * insertion method inserts a new character before and after each letter in the word then indexes the dictionary
+     * <p>
+     * method iterates over each index of word, then tries adding every character in the aplhabet to that position
+     * <p>
+     * @param word is the correctly spelled word 
+     * @return String is the correctly spelled word or 'none'
+     */
     private String insertion(String word) {
         char alphabet[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; //create char[] with all letter in alphabet
         char[] arr_word = word.toCharArray();//convert string word to char[]
@@ -348,7 +368,7 @@ public class checkSpelling {
                     insert_arr_word[k] = arr_word[k]; 
                 }
                 insert_arr_word[i] = alphabet[j]; //add new character
-                for (int k = i; k < arr_word.length; k++) { //add letters form arr_word following index i
+                for (int k = i; k < arr_word.length; k++) { //add letters from arr_word following index i
                     insert_arr_word[k + 1] = arr_word[k];
                 }
                 String str_word = String.valueOf(insert_arr_word).trim(); //convert to string and trim
@@ -371,10 +391,10 @@ public class checkSpelling {
      * @return String is the correctly spelled word with punctuation added back (if punctuation was present initially)
      */
     public String getInsertionSpace(String word) {
-        if (isPunctuationPresent(word)){ // if punctuation found in word
-            word = removePunctuations(word); //remove punctuation
-            word = insertionSpace(word); // check for corrections
-            word = addPunctuation(word); // reinsert punctuation
+        if (isPunctuationPresent(word)){ 
+            word = removePunctuations(word); 
+            word = insertionSpace(word); 
+            word = addPunctuation(word); 
             return word;
         }
         else {
@@ -382,7 +402,14 @@ public class checkSpelling {
             return word;
         }
     }
-    
+    /**
+     * insertionSpace method splits word into two words and indexs both in dictionary
+     * <p>
+     * method iterates over each index of word and uses that index as the split point for the two words
+     * <p>
+     * @param word is the correctly spelled word 
+     * @return String is the correctly spelled word or 'none'
+     */
     public String insertionSpace(String word) {
         char[] arr_word = word.toCharArray(); // convert string word to char[] to allow editing of word before indexing dictionary
         for (int i = 1; i < arr_word.length; i++) { //iterate through word starting after first letter
@@ -436,7 +463,11 @@ public class checkSpelling {
             return word;
         }
     }
-
+    /**
+     * reversal method swaps each letter with the following letter in word and indexes the new word in dictionary
+     * @param word is the correctly spelled word 
+     * @return String is the correctly spelled word or 'none'
+     */
     private String reversal(String word) {
         char[] arr_word = word.toCharArray(); // convert string to char[] to allow for editing before indexing
         for(int i = 0; i < ((arr_word.length)-1); i++){ //iterate through word and stop before reaching last index
