@@ -1,3 +1,9 @@
+/**
+ * this class is is used to generate possible corrections for misspelled words
+ * @author Ross Cameron
+ */
+
+ // 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
