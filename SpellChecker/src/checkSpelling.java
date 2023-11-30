@@ -108,14 +108,12 @@ public class checkSpelling {
             textWords = textLines[l].split(" ");
 
             for (int i = 0; i < textWords.length; i++) { 
-                String copy = textWords[i];
                 if(this.capFirst == true){
                     char temp = textWords[i].charAt(0);
                     this.capFirst = false;
                     if(temp != textWords[i].toUpperCase().charAt(0)){ //this != This
                         this.capFirst = false;
                         this.originalWord = textWords[i];
-                        System.out.println("1");
                         return this.originalWord; //return this as a capitalization error
                     }
                 }
@@ -130,15 +128,12 @@ public class checkSpelling {
                     }
 
                     if(!this.dictionary.containsKey(textWords[i].toLowerCase())){
-                        System.out.println(textWords[i]);
                         if(punctuationRemoved == '-'){
                             this.originalWord = addPunctuation(textWords[i]);
                             this.capFirst = false;
-                            System.out.println("2");
                             return this.originalWord;
                         }
-                        this.originalWord = removePunctuations(copy);
-                        System.out.println("3");
+                        this.originalWord = removePunctuations(textWords[i]);
                         return this.originalWord;
                     }
                 }
@@ -156,7 +151,6 @@ public class checkSpelling {
                 if (!this.dictionary.containsKey(word2)){
                     this.originalWord = textWords[i];
                     this.capFirst = false;
-                    System.out.println("4");
                     return this.originalWord;
                 }
 
@@ -164,7 +158,6 @@ public class checkSpelling {
                     if(textWords[i].toLowerCase().equals(textWords[i+1].toLowerCase())){
                         this.originalWord = textWords[i] + " " + textWords[i+1];
                         this.capFirst = false;
-                        System.out.println("5");
                         return this.originalWord;
                     }
                 }

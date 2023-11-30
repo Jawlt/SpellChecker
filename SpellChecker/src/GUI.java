@@ -74,11 +74,23 @@ public class GUI extends Dictionary implements ActionListener {
 
     // text area + scroll bar
     private JTextPane textPane;
-    private JTextPane userDictionaryTextPane;
     private JScrollPane scrollPane;
 
-    // updated text pane
+    // updated userDictionary text frame
     private JFrame userFrame;
+    private JTextPane userDictionaryTextPane;
+
+    //counters for metrics
+    int substitutionCounter;
+    int omissionCounter;
+    int insertionCounter;
+    int insertionSpaceCounter;
+    int reversalCounter;
+    int manualCounter;
+    int capitalizeCounter;
+    int wordCounter;
+    int characterCounter;
+
 
     public GUI(){
         loadDictionary();
@@ -102,6 +114,16 @@ public class GUI extends Dictionary implements ActionListener {
         this.userDictionaryTextPane = new JTextPane();
         this.scrollPane = new JScrollPane(textPane);
         this.userFrame = new JFrame();
+
+        this.substitutionCounter = 0;
+        this.omissionCounter = 0;
+        this.insertionCounter = 0;
+        this.insertionSpaceCounter = 0;
+        this.reversalCounter = 0;
+        this.manualCounter = 0;
+        this.capitalizeCounter = 0;
+        this.wordCounter = 0;
+        this.characterCounter = 0;
 
         textPane.setDragEnabled(true);
         textPane.setDropTarget(new DropTarget(textPane, new TextFileDropTargetListener(textPane)));
@@ -466,6 +488,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.substitutionCounter++;
             findNextError();
         } 
 
@@ -488,6 +511,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.omissionCounter++;
             findNextError();
         } 
 
@@ -510,6 +534,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.insertionCounter++;
             findNextError();
         } 
 
@@ -532,6 +557,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.insertionSpaceCounter++;
             findNextError();
         } 
 
@@ -554,6 +580,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.reversalCounter++;
             findNextError();
         } 
 
@@ -576,6 +603,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.capitalizeCounter++;
             findNextError();
         }
         
@@ -600,6 +628,7 @@ public class GUI extends Dictionary implements ActionListener {
             if (offset != -1) {
                 doc.setCharacterAttributes(offset, length, style, false);
             }
+            this.manualCounter++;
             findNextError();
         }
         
@@ -682,15 +711,27 @@ public class GUI extends Dictionary implements ActionListener {
     /** 
     public String viewErrorSummary(){
 
-    }
+    }*/
 
-    public String viewCorrectionMetrics(){
+    public void updateMetrics(){
+        //loops through entire text document and counts words
+        //word count and char count
+        String[] textLines = textDocument.split("\\s+");
+        String[] textWords;
+        for(int l = 0; l < textLines.length; l++){
+            textWords = new String[textLines[l].length()-1];
+            textWords = textLines[l].split(" ");
+            wordCounter += textWords.length;
+            for (int i = 0; i < textWords.length; i++) {
+                characterCounter += textWords[i].length();
+          }
+        }
+
 
     }
-    */
+    
 
     public static void main(String[] args) {
         new GUI();
- 
     } 
 }
