@@ -3,6 +3,11 @@ import java.util.*;
 import java.util.Map.Entry;
 
 // Dictionary(child class) inherits methods from userDictionary(super class)
+/**
+ * This class is used to create a Dictionary Object that extends the previous userDictionary class and has specific methods to 
+ * work with the dictionary.
+ * @author Ojas Hunjan
+ */
 public class Dictionary extends userDictionary{
     private Hashtable<String, String> dictionary;
     private Hashtable<String, String> userDictionary;
