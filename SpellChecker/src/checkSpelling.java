@@ -258,19 +258,19 @@ public class checkSpelling {
     }
     private String substitution(String word){
         char alphabet[]= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; // create alphabet array
-        char[] arr_word = word.toCharArray();
+        char[] arr_word = word.toCharArray(); //convert string char[]
         
-        for(int k=0;k<arr_word.length;k++){
-            char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 
-            for(int i=0;i<alphabet.length;i++){ 
-                edited_arr_word[k] = alphabet[i]; 
-                String str_word = String.valueOf(edited_arr_word); 
-                if(this.dictionary.containsKey(str_word.toLowerCase())){ 
-                    return str_word; 
+        for(int k=0;k<arr_word.length;k++){ //iterate through each character in word
+            char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); //copy arr_word into new char[] to ensure array is reset at each iteration
+            for(int i=0;i<alphabet.length;i++){ //iterate through alphabet array
+                edited_arr_word[k] = alphabet[i]; //set letter in word at index i to letter in alphabet at index k
+                String str_word = String.valueOf(edited_arr_word); //covert to string
+                if(this.dictionary.containsKey(str_word.toLowerCase())){ //index dictionary
+                    return str_word; //return correction
                 }
             }
         }
-        return "none";
+        return "none"; //if no correction found return 'none'
     }
 
     /**
@@ -384,33 +384,33 @@ public class checkSpelling {
     }
     
     public String insertionSpace(String word) {
-        char[] arr_word = word.toCharArray(); // convert string word to char[] to allow
-        for (int i = 1; i < arr_word.length; i++) {
-            char[] str1 = new char[i];
-            char[] str2 = new char[arr_word.length-i];
-            for (int k = 0; k < i; k++) {
+        char[] arr_word = word.toCharArray(); // convert string word to char[] to allow editing of word before indexing dictionary
+        for (int i = 1; i < arr_word.length; i++) { //iterate through word starting after first letter
+            char[] str1 = new char[i]; //char[] is length of i (number of characters in first section of word)
+            char[] str2 = new char[arr_word.length-i]; //str2 char[] is length of word - i (length of second section of word)
+            for (int k = 0; k < i; k++) { // add characters to str1
                 str1[k] = arr_word[k]; 
             }
-            for (int k = 0; k < str2.length; k++) {
+            for (int k = 0; k < str2.length; k++) { // add characters to str2
                 str2[k] = arr_word[k+i];
             }
-            String str1_word = String.valueOf(str1).trim();
-            String str2_word = String.valueOf(str2).trim();
-            if (this.dictionary.containsKey(str1_word.toLowerCase()) && this.dictionary.containsKey(str2_word.toLowerCase())) {
-                char[] final_words = new char[arr_word.length+1];
-                for(int k = 0; k<str1.length;k++){
+            String str1_word = String.valueOf(str1).trim(); //convert char arrays to strings to index dictionary
+            String str2_word = String.valueOf(str2).trim(); // trim both char arrays to ensure that no empty elements are included
+            if (this.dictionary.containsKey(str1_word.toLowerCase()) && this.dictionary.containsKey(str2_word.toLowerCase())) { //index dictionary to see if both strings are words
+                char[] final_words = new char[arr_word.length+1]; //create char array to contain both words and space in between
+                for(int k = 0; k<str1.length;k++){ //add first word
                     final_words[k] = str1[k];
                 }
-                final_words[str1.length] = ' ';
-                for(int k = 0; k<str2.length;k++){
+                final_words[str1.length] = ' '; //add space
+                for(int k = 0; k<str2.length;k++){ //add second word
                     final_words[k+str1.length+1] = str2[k];
                 }
-                String stringToReturn = String.valueOf(final_words).trim();
-                return stringToReturn;
+                String stringToReturn = String.valueOf(final_words).trim(); // trim char array
+                return stringToReturn; //return string
             }
             
         }
-        return "none";
+        return "none"; //if no corrections found return 'none'
     }
     
     /**
@@ -438,20 +438,20 @@ public class checkSpelling {
     }
 
     private String reversal(String word) {
-        char[] arr_word = word.toCharArray();
-        for(int i = 0; i < ((arr_word.length)-1); i++){ 
-            char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); 
+        char[] arr_word = word.toCharArray(); // convert string to char[] to allow for editing before indexing
+        for(int i = 0; i < ((arr_word.length)-1); i++){ //iterate through word and stop before reaching last index
+            char[] edited_arr_word = Arrays.copyOf(arr_word, arr_word.length); //recopy char array arr_word into new char array to ensure the array reset at every iteration
             char temp; 
-            temp = edited_arr_word[i];
-            edited_arr_word[i] = edited_arr_word[i+1];
-            edited_arr_word[i+1] = temp;
-            String str_word = String.valueOf(edited_arr_word);
-            str_word.trim(); 
-            if (this.dictionary.containsKey(str_word.toLowerCase())) {
-                return str_word; 
+            temp = edited_arr_word[i]; // save letter at first index
+            edited_arr_word[i] = edited_arr_word[i+1]; //set first index to letter at second index
+            edited_arr_word[i+1] = temp; // set senond index to saved letter at temp
+            String str_word = String.valueOf(edited_arr_word); //convert to string
+            str_word.trim(); //trim
+            if (this.dictionary.containsKey(str_word.toLowerCase())) { //index dictionary
+                return str_word; //return correction
             }
         }
-        return "none";
+        return "none"; //if no correction return 'none'
     }
 
 }
