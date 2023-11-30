@@ -1,4 +1,9 @@
-import java.util.*;
+/**
+ * This class runs the code and displays the GUI
+ * @author Jawalant Patel, Lance Cheong Youne
+ */
+
+// Imports needed
 import java.awt.Color;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
@@ -9,14 +14,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.file.Files;
-
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
-
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -26,76 +25,47 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import javax.swing.text.html.HTMLWriter;
 
-import org.jsoup.*;
-import org.jsoup.helper.*;
-import org.jsoup.nodes.*;
-import org.jsoup.select.*;
-
-// GUI(child class) inherits methods from Dictionary(super class)
+// GUI(child class) inherits methods from Dictionary(super class) and implements ActionListener needed for buttons
 public class GUI extends Dictionary implements ActionListener {
+    // Initialize private variables
 	private String correctSubstitutionWord, correctOmissionWord, correctInsertionWord, correctInsertionSpaceWord, correctReversalWord, correctManualWord, correctCapitalizedWord; 
     private String originalWord;
-    private String textDocument; // Massive peice of string to display on interface
-    private List<String> correctionList = new ArrayList<String>();
-    private List<String> errorSummaryBlock = new ArrayList<String>();
-    //private Dictionary errorCorrectionMetrics = new Hashtable();
+    private String textDocument;
     
+    // Initialize private frame/panel variables
     private JFrame frame;
     private JLayeredPane layeredPane;
+    private JPanel topButtonPanel, textPanel, errorPanel;
 
-    // Initialize menu buttons
-    private JPanel topButtonPanel;
-    private JPanel textPanel;
-    private JPanel errorPanel;
-    private JButton openFileButton;
-    private JButton saveFileButton;
-    private JButton resetButton;
-    private JButton spellCheck;
-    private JButton viewUserDictionary;
-    private JButton removeUserDictionaryWord;
-    private JButton helpButton;
-    private JButton exitButton;
+    // Initialize private button variables
+    private JButton openFileButton, saveFileButton, resetButton, spellCheck, viewUserDictionary, removeUserDictionaryWord, exitButton;
+    private JButton darkModeButton, lightModeButton;
 
     // Initialize error buttons
-    private JButton incorrectWord; //hold the current incorrect word
-    private JButton substitution;
-    private JButton omission;
-    private JButton insertion;
-    private JButton insertionSpace;
-    private JButton reversal;
-    private JButton manual;
+    private JButton incorrectWord, substitution, omission, insertion, insertionSpace, reversal, manual;
+    private JButton capitalize, addToDictionary, ignoreError;
 
-    // Initialize other buttons
-    private JButton capitalize;
-    private JButton addToDictionary;
-    private JButton ignoreError;
-
-    // text area + scroll bar
-    private JTextPane textPane;
+    // Initialize text areas and scroll bar
+    private JTextPane textPane, metricsPane, helpPane;
     private JScrollPane scrollPane;
 
-    // updated userDictionary text frame
+    // Initialize a separate userDictionary text frame
     private JFrame userFrame;
     private JTextPane userDictionaryTextPane;
 
-    //counters for metrics
-    int substitutionCounter;
-    int omissionCounter;
-    int insertionCounter;
-    int insertionSpaceCounter;
-    int reversalCounter;
-    int manualCounter;
-    int capitalizeCounter;
-    int wordCounter;
-    int characterCounter;
+    // Intialize counter variables for metrics
+    private int substitutionCounter, omissionCounter, insertionCounter, insertionSpaceCounter, reversalCounter, manualCounter, capitalizeCounter, wordCounter, characterCounter;
 
-
+    /**
+     * class constructor method:
+     * sets initial value for necessary variables and adds initial buttons 
+     */
     public GUI(){
+        // Loads words into the Dictionary hashtable
         loadDictionary();
 
-        // menu buttons
+        // Intialize variables and menu buttons
         this.textDocument = new String();
         this.layeredPane = new JLayeredPane();
         this.frame = new JFrame();
@@ -108,13 +78,15 @@ public class GUI extends Dictionary implements ActionListener {
         this.viewUserDictionary = new JButton("View User Dictionary");
         this.removeUserDictionaryWord = new JButton("Remove Word");
         this.spellCheck = new JButton("SpellCheck");
-        this.helpButton = new JButton("Help");
+        this.darkModeButton = new JButton("🌙 Dark Mode");
+        this.lightModeButton = new JButton("🌝 Light Mode");
         this.exitButton = new JButton("Exit");
         this.textPane = new JTextPane();
+        this.metricsPane = new JTextPane();
+        this.helpPane = new JTextPane();
         this.userDictionaryTextPane = new JTextPane();
         this.scrollPane = new JScrollPane(textPane);
         this.userFrame = new JFrame();
-
         this.substitutionCounter = 0;
         this.omissionCounter = 0;
         this.insertionCounter = 0;
@@ -126,17 +98,21 @@ public class GUI extends Dictionary implements ActionListener {
         this.characterCounter = 0;
 
         textPane.setDragEnabled(true);
+        
+        // Allow user to drop files onto textPane
         textPane.setDropTarget(new DropTarget(textPane, new TextFileDropTargetListener(textPane)));
 
+        // Set location for layered pane
         layeredPane.setBounds(0, 0, 1380, 1080);
-        frame.add(layeredPane);
 
+        // Setup frame
+        frame.add(layeredPane);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1380, 1080);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
 
-        // Setting borders for each panel
+        // Setting colour and borders for each panel
         topButtonPanel.setBackground(Color.gray);
         topButtonPanel.setBounds(20, 20, 1325,50);
 
@@ -146,7 +122,7 @@ public class GUI extends Dictionary implements ActionListener {
         errorPanel.setBackground(Color.gray);
         errorPanel.setBounds(860, 90, 485, 930);
 
-        // display menu Buttons
+        // Add listening feature to button and displays menu button
         openFileButton.addActionListener(this);
         openFileButton.setBounds(30, 30, 100, 30);
 
@@ -159,16 +135,31 @@ public class GUI extends Dictionary implements ActionListener {
         spellCheck.addActionListener(this);
         spellCheck.setBounds(730, 30, 100, 30);
 
-        helpButton.addActionListener(this);
-        helpButton.setBounds(1125, 30, 100, 30);
-;
+        darkModeButton.addActionListener(this);
+        darkModeButton.setBounds(1105, 30, 120, 30);
+        
+        lightModeButton.addActionListener(this);
+        lightModeButton.setBounds(1105, 30, 120, 30);
+        lightModeButton.setVisible(false); //hide the light mode button
+
         exitButton.addActionListener(this);
         exitButton.setBounds(1235, 30, 100, 30);
-
-        // Display Text Document on textPanel
+        
+        // Display (scroll paneText Document on the textPanel
         textPane.setEditable(false);
-        //textPane.setText(this.textDocument);
         scrollPane.setBounds(30, 100, 800, 910);
+        scrollPane.setBackground(Color.WHITE);
+        
+        // Set and display the help pane
+        helpPane.setEditable(false);
+        helpPane.setBounds(870, 440, 465, 300);
+        helpPane.setBackground(Color.WHITE);
+        displayHelpPane();
+        
+        metricsPane.setEditable(false);
+        metricsPane.setBounds(870, 815, 465, 195);
+        metricsPane.setBackground(Color.WHITE);
+        metricsPane.setVisible(false);
         
         // Adding panels and buttons to frame
         // Integer.valueOf(x) indicates the layer where the layered pane is, higher number means higher priority
@@ -177,20 +168,26 @@ public class GUI extends Dictionary implements ActionListener {
         layeredPane.add(saveFileButton, Integer.valueOf(1));
         layeredPane.add(viewUserDictionary, Integer.valueOf(1));
         layeredPane.add(spellCheck, Integer.valueOf(1));
-        layeredPane.add(helpButton, Integer.valueOf(1));
+        layeredPane.add(darkModeButton, Integer.valueOf(1));
+        layeredPane.add(lightModeButton, Integer.valueOf(1));
         layeredPane.add(exitButton, Integer.valueOf(1));
         
         layeredPane.add(topButtonPanel, Integer.valueOf(0));
         layeredPane.add(textPanel, Integer.valueOf(0));
         layeredPane.add(errorPanel, Integer.valueOf(0));
+        layeredPane.add(helpPane, Integer.valueOf(1));
+        layeredPane.add(metricsPane, Integer.valueOf(1));
 
         frame.setTitle("GUI");    
         frame.setVisible(true);
-    
+        
     }
     
     public void actionPerformed(ActionEvent e) {  
         if (e.getSource() == openFileButton){
+            metricsPane.setVisible(true);
+            spellCheck.setVisible(false);
+
             JFileChooser fileChooser = new JFileChooser();
             int option = fileChooser.showOpenDialog(frame); 
             File file = fileChooser.getSelectedFile();
@@ -212,9 +209,10 @@ public class GUI extends Dictionary implements ActionListener {
             this.textDocument = fileContent.toString();
            //this.textDocument = Jsoup.parse(this.textDocument).text();
             textPane.setText(this.textDocument);
-            scrollPane.setBounds(30, 100, 800, 910);
+            textPane.setCaretPosition(0);
+            //textPane.setBounds(30, 100, 800, 910);
             setTextDoc(this.textDocument);
-
+            updateMetrics();
             // incorrect word and related buttons
             this.originalWord = getIncorrectWord();
             this.incorrectWord = new JButton(originalWord); 
@@ -251,7 +249,6 @@ public class GUI extends Dictionary implements ActionListener {
             this.insertionSpace = new JButton("InsertionSpace: " + this.correctInsertionSpaceWord);
             this.reversal = new JButton("Reversal: "+ this.correctReversalWord);
             this.manual = new JButton("Manual Correction");
-
 
             // add word to user dictionary button
             this.capitalize = new JButton("Capitalize: " + this.correctCapitalizedWord);
@@ -316,28 +313,7 @@ public class GUI extends Dictionary implements ActionListener {
         }
 
         if(e.getSource() == saveFileButton){
-            JFileChooser saveAs = new JFileChooser();
-            int option = saveAs.showSaveDialog(frame);
-                        
-            File fileName = new File(saveAs.getSelectedFile() + ".txt");
-            BufferedWriter outFile = null;
-            try {
-            outFile = new BufferedWriter(new FileWriter(fileName));
-            this.textPane.write(outFile);   // *** here: ***
-            } 
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            finally {
-                if (outFile != null) {
-                   try {
-                      outFile.close();
-                   } 
-                   catch (IOException ez) {
-                    //left blank intentionally
-                   }
-                }
-            }
+            save();
         }
 
         if(e.getSource() == viewUserDictionary){
@@ -366,10 +342,13 @@ public class GUI extends Dictionary implements ActionListener {
         }
 
         if(e.getSource() == spellCheck){
+            metricsPane.setVisible(true);
+            spellCheck.setVisible(false);
+
             this.textDocument = textPane.getText();
             scrollPane.setBounds(30, 100, 800, 910);
             setTextDoc(this.textDocument);
-
+            updateMetrics();
             // incorrect word and related buttons
             this.originalWord = getIncorrectWord();
             this.incorrectWord = new JButton(this.originalWord); 
@@ -465,7 +444,42 @@ public class GUI extends Dictionary implements ActionListener {
             layeredPane.add(resetButton, Integer.valueOf(1));
         }
 
+        if(e.getSource() == darkModeButton){
+            darkModeButton.setVisible(false);
+            lightModeButton.setVisible(true);
+            frame.getContentPane().setBackground(Color.BLACK);
+            topButtonPanel.setBackground(Color.DARK_GRAY);
+            textPanel.setBackground(Color.DARK_GRAY);
+            errorPanel.setBackground(Color.DARK_GRAY);
+            topButtonPanel.setBackground(Color.DARK_GRAY);
+
+            textPane.setBackground(Color.BLACK);
+            textPane.setForeground(Color.WHITE);
+            metricsPane.setBackground(Color.BLACK);
+            metricsPane.setForeground(Color.WHITE);
+            helpPane.setBackground(Color.BLACK);
+            helpPane.setForeground(Color.WHITE);
+        } 
+
+        if(e.getSource() == lightModeButton){
+            darkModeButton.setVisible(true);
+            lightModeButton.setVisible(false);
+            frame.getContentPane().setBackground(Color.WHITE);
+            topButtonPanel.setBackground(Color.GRAY);
+            textPanel.setBackground(Color.GRAY);
+            errorPanel.setBackground(Color.GRAY);
+            topButtonPanel.setBackground(Color.GRAY);
+
+            textPane.setBackground(Color.WHITE);
+            textPane.setForeground(Color.BLACK);
+            metricsPane.setBackground(Color.WHITE);
+            metricsPane.setForeground(Color.BLACK);
+            helpPane.setBackground(Color.WHITE);
+            helpPane.setForeground(Color.BLACK);
+        }
+
         if(e.getSource() == exitButton){
+            save();
             System.exit(0);
         } 
 
@@ -648,10 +662,12 @@ public class GUI extends Dictionary implements ActionListener {
     }
 
     private void findNextError() { 
+        textPane.setCaretPosition(0);
         // updates the textDocument
         setTextDoc(this.textDocument);
-        
+        updateMetrics();
         // gets the next incorrect word
+        
         
         this.originalWord = getIncorrectWord();
         // if no more errors
@@ -718,6 +734,8 @@ public class GUI extends Dictionary implements ActionListener {
         //word count and char count
         String[] textLines = textDocument.split("\\s+");
         String[] textWords;
+        wordCounter = 0;
+        characterCounter = 0;
         for(int l = 0; l < textLines.length; l++){
             textWords = new String[textLines[l].length()-1];
             textWords = textLines[l].split(" ");
@@ -727,9 +745,53 @@ public class GUI extends Dictionary implements ActionListener {
           }
         }
 
-        //add other counters in and put into textpanel
+        String line = "-------------------------------------------------------------------------------------------------------------------";
+        String metrics = "\t\t            Correction Metrics\n" + line + "\nSwapped Letters (Substitution): " + substitutionCounter + "\nExtra Letters Removed (Omission): " + omissionCounter 
+        + "\nAdded Letters (Insertion): " + insertionCounter + "\nSpaced Letters (InsertionSpace): " + insertionSpaceCounter + "\nReversed Letters (Reversal): " + reversalCounter
+        + "\nCapitalized Words (Capitalize): " + capitalizeCounter + "\nManually Corrected Words (Capitalize): " + manualCounter
+        + "\n\nWord Count: " + wordCounter + "\t\tCharacter Count: " + characterCounter;
+        metricsPane.setText(metrics);
     }
     
+    public void displayHelpPane(){
+
+        String dotLine = "-------------------------------------------------------------------------------------------------------------------\n";
+        String help = "\t\t                   Help/Steps\n" + dotLine
+        + "1. Open file or drag File onto white space on the left.\n\n"
+        + "2. Run spellCheck button if file is draged in.\n\n"
+        + "3. Choose corrections from the 8 buttons on the right.\n\n"
+        + "4. If a word was added to userDictionary or Ignored, you can remove it by clicking view userDictionary button.\n\n"
+        + "5. If no correction is appealing choose manual correcion.\n\n"
+        + "6. Repeat Steps until last correction (buttons wont apear).\n\n"
+        + "7. Save file using \"filename\" (do not write \".txt\").\n\n"
+        + "8. Exit applicatioons or reset to test another file.\n\n";
+        helpPane.setText(help);
+    }
+
+    public void save(){
+        JFileChooser saveAs = new JFileChooser();
+        int option = saveAs.showSaveDialog(frame);
+                    
+        File fileName = new File(saveAs.getSelectedFile() + ".txt");
+        BufferedWriter outFile = null;
+        try {
+            outFile = new BufferedWriter(new FileWriter(fileName));
+            this.textPane.write(outFile);   // *** here: ***
+        } 
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            if (outFile != null) {
+                try {
+                    outFile.close();
+                } 
+                catch (IOException ez) {
+                //left blank intentionally
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
         new GUI();

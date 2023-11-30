@@ -8,13 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
 import javax.swing.JTextPane;
-
-import org.jsoup.*;
-import org.jsoup.helper.*;
-import org.jsoup.nodes.*;
-import org.jsoup.select.*;
 
 class TextFileDropTargetListener extends DropTargetAdapter {
     private JTextPane textPane;
@@ -58,6 +52,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
             // Read the file
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
+            
             while ((line = reader.readLine()) != null) {
                 fileContent = fileContent.append(line).append("\n").append(" ");   // You can change this to display in a GUI component
             }
@@ -67,7 +62,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
         }
 
         String textDocument = fileContent.toString();
-        //textDocument = Jsoup.parse(textDocument).text();
         textPane.setText(textDocument);
+        textPane.setCaretPosition(0);
     }
 }

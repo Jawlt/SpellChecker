@@ -3,20 +3,16 @@
  * @author Ross Cameron
  */
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
 
 public class checkSpelling {
     //initialize private variable to be used in later methods
-    private String correctedWord;
     private String originalWord;
     private Hashtable<String, String>dictionary;
     private Hashtable<String, String>userDictionary;
     private String textDocument;
-    private Hashtable<String, String>incorrectWordList;
-    private Hashtable<Character, Integer>punctuationIndex; //
+    private Hashtable<Character, Integer>punctuationIndex;
     private char punctuationRemoved;
     private boolean capFirst;
     private String noPunctuationWord;
@@ -29,9 +25,7 @@ public class checkSpelling {
         this.textDocument = new String();
         this.dictionary = new Hashtable<String, String>();
         this.userDictionary = new Hashtable<String, String>();
-        this.correctedWord = new String();
         this.originalWord = new String();
-        this.incorrectWordList = new Hashtable<String, String>();
         this.punctuationIndex = new Hashtable<Character, Integer>();
         this.punctuationRemoved = ' ';
         this.noPunctuationWord = new String();
