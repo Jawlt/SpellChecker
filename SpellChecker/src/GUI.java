@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -144,8 +145,7 @@ public class GUI extends Dictionary implements ActionListener {
 
         // Display Text Document on textPanel
         textPane.setEditable(false);
-
-        textPane.setText(this.textDocument);
+        //textPane.setText(this.textDocument);
         scrollPane.setBounds(30, 100, 800, 910);
         
         // Adding panels and buttons to frame
@@ -179,18 +179,19 @@ public class GUI extends Dictionary implements ActionListener {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    fileContent.append(line).append("\n");   // You can change this to display in a GUI component
+                    fileContent = fileContent.append(line).append("\n").append(" ");   // You can change this to display in a GUI component
                 }
                 reader.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
             
+           //this.textDocument = textPane.getText();
             this.textDocument = fileContent.toString();
-            this.textDocument = Jsoup.parse(this.textDocument).text();
+           //this.textDocument = Jsoup.parse(this.textDocument).text();
             textPane.setText(this.textDocument);
             scrollPane.setBounds(30, 100, 800, 910);
-            setTextDoc(textDocument);
+            setTextDoc(this.textDocument);
 
             // incorrect word and related buttons
             this.originalWord = getIncorrectWord();
@@ -343,7 +344,7 @@ public class GUI extends Dictionary implements ActionListener {
         }
 
         if(e.getSource() == spellCheck){
-            this.textDocument = textPane.getText().toString();
+            this.textDocument = textPane.getText();
             scrollPane.setBounds(30, 100, 800, 910);
             setTextDoc(this.textDocument);
 
@@ -624,7 +625,6 @@ public class GUI extends Dictionary implements ActionListener {
         // gets the next incorrect word
         
         this.originalWord = getIncorrectWord();
-        System.out.println("word:" + this.originalWord);
         // if no more errors
         if (this.originalWord == null) {
             incorrectWord.setVisible(false);

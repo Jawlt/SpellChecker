@@ -59,7 +59,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                fileContent.append(line).append("\n");   // You can change this to display in a GUI component
+                fileContent = fileContent.append(line).append("\n").append(" ");   // You can change this to display in a GUI component
             }
             reader.close();
         } catch (IOException ex) {
@@ -67,7 +67,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
         }
 
         String textDocument = fileContent.toString();
-        textDocument = Jsoup.parse(textDocument).text();
+        //textDocument = Jsoup.parse(textDocument).text();
         textPane.setText(textDocument);
     }
 }
