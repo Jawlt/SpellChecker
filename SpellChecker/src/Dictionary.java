@@ -21,6 +21,11 @@ public class Dictionary extends userDictionary{
         return this.dictionary;
     }
 
+    // Get combined dictionary method
+    public Hashtable<String, String> getCombinedDictionary(){
+        return this.combinedDictionary;
+    }
+
     // Loads words from the Dictionary text file to the Dictionary hashtable
     public Hashtable<String, String> loadDictionary() {
         this.dictionary.clear();
@@ -75,6 +80,13 @@ public class Dictionary extends userDictionary{
         }
     }
     
+    public boolean assertEquals(Hashtable<String, String> a, Hashtable<String, String> b){
+        if(a.equals(b)){
+            return true;
+        }
+        return false;
+    }
+
     /** Testing the dictionary/user dictionary: [UPDATE: it works now ~lance, jawlt*/
     public static void main(String[] args) {
         Dictionary test = new Dictionary();
@@ -85,7 +97,11 @@ public class Dictionary extends userDictionary{
         //System.out.println(test.substitution("aplpe"));
         
     
-        //System.out.println(test.omission("aplpe"));
+        System.out.println(test.getInsertion("pprogram"));
+        System.out.println(test.getSubstitution("pprogram"));
+        System.out.println(test.getInsertionSpace("pprogram"));
+        System.out.println(test.getReversal("pprogram"));
+        System.out.println(test.getOmission("pprogram"));
         //System.out.println(test.insertionSpace("isa"));
         //System.out.println(test.insertionSpace("notworking"));
         //System.out.println(test.addPunctuation("assignment"));

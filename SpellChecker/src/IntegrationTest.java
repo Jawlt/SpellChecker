@@ -18,7 +18,7 @@ class IntegrationTest {
 
         Hashtable<String, String> userDict = dict.getUserDictionary();
 
-        Hashtable<String, String> combineddict = new Hashtable<>();
+        Hashtable<String, String> combineddict = dict.getCombinedDictionary();
 
         userDict.put("test", "test");
 
@@ -30,7 +30,7 @@ class IntegrationTest {
 
         combineddict.put("program", "program");
 
-        assertEquals(combineddict, dict.getDictionary());
+        assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
 
@@ -45,7 +45,7 @@ class IntegrationTest {
 
         Hashtable<String, String> userDict = dict.getUserDictionary();
 
-        Hashtable<String, String> combineddict = new Hashtable<>();
+        Hashtable<String, String> combineddict = dict.getCombinedDictionary();
 
         userDict.put("tes", "test");
 
@@ -53,7 +53,7 @@ class IntegrationTest {
 
         corrections.setDictionary(userDict);
 
-        corrections.getOmission("tes");
+        corrections.getInsertion("tes");
 
         dict.combineDictionary();
 
@@ -61,7 +61,7 @@ class IntegrationTest {
 
         combineddict.put("program", "program");
 
-        assertEquals(combineddict, dict.getDictionary());
+        assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
 
@@ -71,12 +71,12 @@ class IntegrationTest {
         checkSpelling corrections = new checkSpelling();
 
         Dictionary dict = new Dictionary();
-
+        
         Hashtable<String, String> testDict = dict.getDictionary();
 
         Hashtable<String, String> userDict = dict.getUserDictionary();
 
-        Hashtable<String, String> combineddict = new Hashtable<>();
+        Hashtable<String, String> combineddict = dict.getCombinedDictionary();
 
         userDict.put("test", "test");
 
@@ -84,7 +84,7 @@ class IntegrationTest {
 
         corrections.setDictionary(userDict);
 
-        corrections.getInsertion("pprogram");
+        corrections.getOmission("pprogram");
 
         dict.combineDictionary();
 
@@ -92,7 +92,7 @@ class IntegrationTest {
 
         combineddict.put("program", "program");
 
-        assertEquals(combineddict, dict.getDictionary());
+        assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
 
@@ -102,7 +102,7 @@ class IntegrationTest {
         Dictionary dict = new Dictionary();
         Hashtable<String, String> testDict = dict.getDictionary();
         Hashtable<String, String> userDict = dict.getUserDictionary();
-        Hashtable<String, String> combineddict = new Hashtable<>();
+        Hashtable<String, String> combineddict = dict.getCombinedDictionary();
         testDict.put("test", "test");
         userDict.put("the", "the");
         combineddict.put("test", "test");
@@ -120,7 +120,7 @@ class IntegrationTest {
         Dictionary dict = new Dictionary();
         Hashtable<String, String> testDict = dict.getDictionary();
         Hashtable<String, String> userDict = dict.getUserDictionary();
-        Hashtable<String, String> combineddict = new Hashtable<>();
+        Hashtable<String, String> combineddict = dict.getCombinedDictionary();
         testDict.put("test", "test");
         testDict.put("the", "the");
         userDict.put("program", "program");
@@ -128,7 +128,7 @@ class IntegrationTest {
         combineddict.put("the", "the");
         dict.combineDictionary();
         dict.getDictionary().remove("program", "program");
-        assertEquals(combineddict, dict.getDictionary());
+        assertEquals(combineddict, dict.getCombinedDictionary());
 
     }
 
