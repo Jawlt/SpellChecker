@@ -5,10 +5,7 @@
  */
 
 import org.junit.jupiter.api.Test;//import unit tests
-
-//import java.util.Dictionary;
 import java.util.Hashtable;//import hash table functionality
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class IntegrationTest {//creation of class
