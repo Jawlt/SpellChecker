@@ -1,3 +1,8 @@
+/**
+ * This class converts dropable .txt file into text to display onto textpane in GUI
+ * @author Lance Cheong Youne, Jwalant Patel
+ */
+
 import java.util.List;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -11,12 +16,22 @@ import java.io.IOException;
 import javax.swing.JTextPane;
 
 class TextFileDropTargetListener extends DropTargetAdapter {
+    //initialize private variable
     private JTextPane textPane;
 
+    /**
+     * class constructor method
+     * sets initial value for necessary variables
+     */
     public TextFileDropTargetListener(JTextPane textPane) {
         this.textPane = textPane;
     }
 
+    /**
+    * drop method used to accept dropable files copies text onto a pane
+    * @param event is the event called by another class
+    * @return void
+    */
     @Override
     public void drop(DropTargetDropEvent event) {
         try {
@@ -46,6 +61,11 @@ class TextFileDropTargetListener extends DropTargetAdapter {
         }
     }
 
+    /**
+    * readFile helper method used to read and write from the file dropped
+    * @param file is the file dropped into the pane
+    * @return void
+    */
     private void readFile(File file) throws IOException {
         StringBuilder fileContent = new StringBuilder();
         try {
@@ -53,6 +73,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             
+            // While new line is not null add string to fileContent
             while ((line = reader.readLine()) != null) {
                 fileContent = fileContent.append(line).append("\n").append(" ");   // You can change this to display in a GUI component
             }
@@ -60,7 +81,7 @@ class TextFileDropTargetListener extends DropTargetAdapter {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        // Set text pane using string from fileContent
         String textDocument = fileContent.toString();
         textPane.setText(textDocument);
     }

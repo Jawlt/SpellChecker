@@ -35,19 +35,19 @@ public class checkSpelling {
     /**
      * check method returns true if input ch (type char) is a punctuation mark
      * @param ch a character from a string which another method is checking
-     * @return boolean
+     * @return boolean is true or false
      */
     public boolean check(char ch) {
         return "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".indexOf(ch) != -1;
     }
     
     /**
-     * isPunctuationPresent method check if string contains punctuation
+     * isPunctuationPresent method checks if string contains a punctuation
      * <p>
      * iterates over characters in String word and utilizes check() method 
      * to determine if any character in the String is a punctation mark
      * <p>
-     * @param word is the the word to be checked against dictionary from user text
+     * @param word is the the word to be checked for punctuation
      * @return boolean
      */
     public boolean isPunctuationPresent(String word){
@@ -68,32 +68,33 @@ public class checkSpelling {
     /**
      * removePunctuations method stores and removes punctuation mark from string
      * <p>
-     * method removes punctuation by finding the punctuation the moving each of 
-     * the following characters backwards
+     * method removes punctuation by finding the punctuation, removes it, saves/stores the
+     * index of the punctuation and store the punctuation itself
      * <p>
-     * @param word 
-     * @return String new version of word with no punctuation
+     * @param word is the word to be stripped of punctuation
+     * @return String is the new version of the word passed with no punctuation
      */
     public String removePunctuations(String word) {
         char[] temp = word.toCharArray();
         char[] edited_temp = new char[temp.length]; 
         for (int i = 0; i < word.length(); i++){
             if (check(temp[i])){
-                punctuationIndex.put(temp[i], i);
+                punctuationIndex.put(temp[i], i); //punctuation and index is stored
                 punctuationRemoved = temp[i]; //punctuation is stored
-
+                
+                //skips puncation and stores in previous index
                 for(int j = i; j < word.length()-1; j++){
                     edited_temp[j] = temp[j+1];
                 }
                 break;
             }
-            else {
-                //app_l  
+            else {  
                 edited_temp[i] = temp[i];
             }
         }
         
         for (int i = 0; i < word.length(); i++){
+            // Checks for punctuatuiosn that end sentences and sets capFirst to true
             if (temp[i] == '.' || temp[i] == '!' || temp[i] == '?'){
                 this.capFirst = true;
                 break;
@@ -107,13 +108,12 @@ public class checkSpelling {
     }
 
     /**
-     * addPunctuation method reinserts punctuation into same spot in correct word
+     * addPunctuation method reinserts punctuation into the original index in the correct word
      * <p>
-     * iterates over characters in String word and utilizes check() method 
-     * to determine if any character in the String is a punctation mark
+     * makes two substrings and combine them while inserting the punctuation at the right index
      * <p>
-     * @param correctWord is the correctly spelled word 
-     * @return String is the correctly spelled word with punctuation added back
+     * @param correctWord is the word with the punctuation removed
+     * @return String is the word with punctuation added back
      */
     public String addPunctuation(String correctWord) {
         correctWord = correctWord.substring(0, punctuationIndex.get(punctuationRemoved)) + punctuationRemoved + correctWord.substring(punctuationIndex.get(punctuationRemoved));
@@ -131,7 +131,7 @@ public class checkSpelling {
 
     /**
      * setDictionary simple setter method used to initialize the dictionary
-     * @param dictionary Hashtable<String, String> containing dictionary
+     * @param dictionary Hashtable<String, String> containing the dictionary
      * @return void
      */
     public void setDictionary(Hashtable<String, String> dictionary){
@@ -140,13 +140,18 @@ public class checkSpelling {
 
     /**
      * setUserDictionary simple setter method used to initialize the user dictionary
-     * @param userDictionary Hashtable<String, String> containing user dictionary
+     * @param userDictionary Hashtable<String, String> containing the user dictionary
      * @return void
      */
     public void setUserDictionary(Hashtable<String, String> userDictionary){
         this.userDictionary = userDictionary;
     }
-
+    
+    /**
+     * getIncorrect method gets the next incorrect word
+     * @param none
+     * @return String is the incorrect word returned 
+     */
     public String getIncorrectWord() {
         String[] textLines = textDocument.split("\\s+ ");
         String[] textWords;
