@@ -16,6 +16,8 @@ class IntegrationTest {//creation of class
     /**
      * This method gets adds words to the user and test dictionary and combines them and then compares it to another created dictionary
      * to see if they are the same after functions have been applied
+     * @param none
+     * @return void
      */
     public void OutputofCombiningUserandTestDictionary() {//test for combining user and test dictionary
 
@@ -36,6 +38,9 @@ class IntegrationTest {//creation of class
     /**
      * This test fixes an error in the user dict before combining with the test dict. It ensures that checkSpelling methods
      * apply correctly to the created dictionaries.
+     * @param none
+     * @return node
+     *
      */
     public void fixErrorinuserDictbeforeCombining() {
 
@@ -59,6 +64,8 @@ class IntegrationTest {//creation of class
     /**
      * This test fixes an error in the test dictionary before combining with user dict. It ensures that checkSpelling methods
      * apply correctly to the created dictionaries.
+     * @param none
+     * @return none
      */
     public void fixErrorintestDictbeforeCombining() {
 
@@ -82,6 +89,8 @@ class IntegrationTest {//creation of class
     /**
      * This test adds a word after the dictionary has combined. It ensures that even after the creation of one dictionary, it can
      * still be updated and compared.
+     * @param none
+     * @return void
      */
     public void addwordafterDictionaryisCombined() {
 
@@ -104,6 +113,8 @@ class IntegrationTest {//creation of class
     /**
      * This test removes a word after the dictionary has been combined. It ensures that even after the creation of one dictionary, it can
      * still be updated and compared.
+     * @param none
+     * @return void
      */
     public void removewordafterDictionaryisCombined() {
 
