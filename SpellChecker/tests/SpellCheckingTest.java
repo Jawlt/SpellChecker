@@ -1,12 +1,13 @@
+/**
+ * This class utlizied J-Unit testing in order to test individual aspects of the program related to making sure the various spell checking 
+ * methods work and provide the right correction.
+ * @author Khathab Abdulbaset Hamed, Jwalant Patel
+ */
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.Hashtable;
 
-/**
- * This class utlizied J-Unit testing in order to test individual aspects of the program related to making sure the various spell checking 
- * methods work and provide the right correction.
- */
 public class SpellCheckingTest {
 
     private checkSpelling spellChecker;//private checkSpelling object is created
@@ -35,8 +36,6 @@ public class SpellCheckingTest {
      * @return void
      */
     public void testInsertion() {
-        //dictionary.put("hell", "helloo"); // Assuming "hell" is the omitted version of "hello"
-        //spellChecker.setDictionary(dictionary);
         assertEquals("hello", spellChecker.getInsertion("hell"));//if equal tests pass
     }
 
@@ -48,8 +47,6 @@ public class SpellCheckingTest {
      * @return void
      */
     public void testOmission() {
-        //dictionary.put("hhello", "hello"); // Assuming "hhello" is the inserted version of "hello"
-        //spellChecker.setDictionary(dictionary);
         assertEquals("hello", spellChecker.getOmission("hhello"));//if equal tests pass
     }
 
@@ -61,8 +58,6 @@ public class SpellCheckingTest {
      * @return void
      */
     public void testSubstitution() {
-        //dictionary.put("jello", "hello"); // Assuming "jello" is the substituted version of "hello"
-        //spellChecker.setDictionary(dictionary);
         assertEquals("hello", spellChecker.getSubstitution("jello"));//if equal tests pass
     }
 
@@ -74,8 +69,6 @@ public class SpellCheckingTest {
      * @return void
      */
     public void testReversal() {
-        //dictionary.put("ehllo", "hello"); // Assuming "ehllo" is the reversed version of "hello"
-        //spellChecker.setDictionary(dictionary);
         assertEquals("hello", spellChecker.getReversal("ehllo"));//if equal tests pass
     }
 
@@ -87,8 +80,6 @@ public class SpellCheckingTest {
      * @return void
      */
     public void testInsertionSpace() {
-        //dictionary.put("he llo", "hello"); // Assuming "he llo" is the spaced version of "hello"
-        //spellChecker.setDictionary(dictionary);
         assertEquals("hello world", spellChecker.getInsertionSpace("helloworld"));//if equal tests pass
     }
 

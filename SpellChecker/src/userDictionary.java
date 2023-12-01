@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 // userDictionary(child class) inherits methods from checkSpelling(super class)
 public class userDictionary extends checkSpelling{
-    //private variables of userDictionary class
+    //initialize private variable
     private Hashtable<String, String> userDictionary;
 
     /**

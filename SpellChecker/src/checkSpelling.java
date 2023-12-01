@@ -149,66 +149,80 @@ public class checkSpelling {
     
     /**
      * getIncorrect method gets the next incorrect word
+     * <p>
+     * test for each case where a word can be spelled incorrectly
+     * and returns the word if so
+     * <p>
      * @param none
      * @return String is the incorrect word returned 
      */
     public String getIncorrectWord() {
+        // Splits textDocument into lines 
         String[] textLines = textDocument.split("\\s+ ");
         String[] textWords;
-
         for(int l = 0; l < textLines.length; l++){
+            // Splits textLines into words
             textWords = new String[textLines[l].length()-1];
             textWords = textLines[l].split(" ");
 
+            // Iterate through the words
             for (int i = 0; i < textWords.length; i++) { 
-                if(this.capFirst == true){
+                // Checks if the first letter is supposed to be capitalized or at index 0
+                if(this.capFirst == true){ //check for first leter being capital
                     char temp = textWords[i].charAt(0);
-                    this.capFirst = false;
-                    if(temp != textWords[i].toUpperCase().charAt(0)){ //this != This
-                        this.capFirst = false;
+                    this.capFirst = false; //set following word to be lowercase
+                    if(temp != textWords[i].toUpperCase().charAt(0)){ // example: this != This
+                        this.capFirst = false; //set following word to be lowercase
                         this.originalWord = textWords[i];
                         return this.originalWord; //return this as a capitalization error
                     }
                 }
-
+                
+                // Checks if punctuation is present
                 if (isPunctuationPresent(textWords[i])){
+                    // remove punctuation
                     textWords[i] = removePunctuations(textWords[i]);
 
-                    //DoG -> DoG
+                    // Checks if words is contained in user Dictionary
                     if(this.userDictionary.containsKey(textWords[i])){
                         this.capFirst = false;
-                        continue;
+                        continue; // go to next word
                     }
-
+                    
+                    // Checks if lower case word is contained in dictionarye
                     if(!this.dictionary.containsKey(textWords[i].toLowerCase())){
+                        // If there is a hyphen
                         if(punctuationRemoved == '-'){
+                            // add punctuation back (example: co-worker)
                             this.originalWord = addPunctuation(textWords[i]);
                             this.capFirst = false;
                             return this.originalWord;
                         }
+                        // do not add punctuation back (example: assignment. is not correct)
                         this.originalWord = removePunctuations(textWords[i]);
                         return this.originalWord;
                     }
                 }
 
-                //DoG -> Dog
+                // Checks if words is contained in user Dictionary
                 if(this.userDictionary.containsKey(textWords[i])){
                     this.capFirst = false;
-                    continue;
+                    continue; // go to next word
                 }
 
-                //assignment DoG -> Dog
+                // Checks if any letter apart from the first one of each word is wrongly capitalized
                 String word = textWords[i];
                 String word2 = word.substring(0, 1).toLowerCase() + word.substring(1); 
-                
                 if (!this.dictionary.containsKey(word2)){
                     this.originalWord = textWords[i];
                     this.capFirst = false;
                     return this.originalWord;
                 }
 
+                // If i still less than textWords.length
                 if(i < textWords.length-1){
-                    if(textWords[i].toLowerCase().equals(textWords[i+1].toLowerCase())){
+                    // Checks and returns errors for double words (example: pizza pizza, This this)
+                    if(textWords[i].toLowerCase().equals(textWords[i+1].toLowerCase())){ // checks if word 
                         if(this.userDictionary.containsKey(textWords[i] + " " + textWords[i+1])){
                             this.capFirst = false;
                             continue;
@@ -217,8 +231,7 @@ public class checkSpelling {
                         this.capFirst = false;
                         return this.originalWord;
                     }
-                }
-                
+                }            
             }
         }
         return null;    
