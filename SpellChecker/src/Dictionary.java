@@ -1,3 +1,7 @@
+/**
+ * This class runs the code and displays the GUI
+ * @author Jawalant Patel, Lance Cheong Youne
+ */
 import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
@@ -85,27 +89,5 @@ public class Dictionary extends userDictionary{
             return true;
         }
         return false;
-    }
-
-    /** Testing the dictionary/user dictionary: [UPDATE: it works now ~lance, jawlt*/
-    public static void main(String[] args) {
-        Dictionary test = new Dictionary();
-        test.loadDictionary();
-
-        
-        //System.out.println(test.reversal("phtoo"));
-        //System.out.println(test.substitution("aplpe"));
-        
-    
-        System.out.println(test.getInsertion("pprogram"));
-        System.out.println(test.getSubstitution("pprogram"));
-        System.out.println(test.getInsertionSpace("pprogram"));
-        System.out.println(test.getReversal("pprogram"));
-        System.out.println(test.getOmission("pprogram"));
-        //System.out.println(test.insertionSpace("isa"));
-        //System.out.println(test.insertionSpace("notworking"));
-        //System.out.println(test.addPunctuation("assignment"));
-        //System.out.println(test.addPunctuation(test.removePunctuations("code")));
-        //System.out.println(test.addPunctuation(test.removePunctuations("co-wrrker")));
     }
 }

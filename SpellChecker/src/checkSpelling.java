@@ -1,6 +1,6 @@
 /**
  * This class is is used to generate possible corrections for misspelled words
- * @author Ross Cameron
+ * @author Ross Cameron, Jwalant Patel, Lance Cheong Youne
  */
 
 import java.util.Arrays;

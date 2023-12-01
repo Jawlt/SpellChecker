@@ -63,6 +63,5 @@ class TextFileDropTargetListener extends DropTargetAdapter {
 
         String textDocument = fileContent.toString();
         textPane.setText(textDocument);
-        textPane.setCaretPosition(0);
     }
 }
