@@ -13,24 +13,32 @@ import java.util.Map.Entry;
  * @author Ojas Hunjan
  */
 public class Dictionary extends userDictionary{
-    private Hashtable<String, String> dictionary;
-    private Hashtable<String, String> userDictionary;
-    private Hashtable<String, String> combinedDictionary; 
+    private Hashtable<String, String> dictionary;//create new dictionary
+    private Hashtable<String, String> userDictionary;//create new user dictionary
+    private Hashtable<String, String> combinedDictionary; //create new combined dictionary
 
-    // Dictionary constructor
+    /**
+     * Constructor method for the class calls the super class of userdictionary and sets instance variables to desired values
+     */
     public Dictionary() {
         super(); //call userDictionary constructor
-        this.dictionary = new Hashtable<String, String>();
-        this.userDictionary = super.getUserDictionary();
-        this.combinedDictionary = new Hashtable<String, String>();
+        this.dictionary = new Hashtable<String, String>();//new dictionary is a new hashtable
+        this.userDictionary = super.getUserDictionary();//userdict is the user dict from that class
+        this.combinedDictionary = new Hashtable<String, String>();//combined dict is new hashtable
     }
 
-    // Get dictionary method
+    /**
+     * This method gets the dictionary of this object
+     * @return dictionary
+     */
     public Hashtable<String, String> getDictionary(){
         return this.dictionary;
     }
 
-    // Get combined dictionary method
+    /**
+     * This
+     * @return
+     */
     public Hashtable<String, String> getCombinedDictionary(){
         return this.combinedDictionary;
     }
