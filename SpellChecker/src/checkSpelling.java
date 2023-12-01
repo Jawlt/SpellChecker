@@ -18,7 +18,7 @@ public class checkSpelling {
     private String noPunctuationWord;
     
     /**
-     * class constructor method:
+     * class constructor method
      * sets initial value for necessary variables
      */
     public checkSpelling(){
