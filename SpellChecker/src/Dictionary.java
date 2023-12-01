@@ -36,40 +36,47 @@ public class Dictionary extends userDictionary{
     }
 
     /**
-     * This
-     * @return
+     * This method returns the combined dictionary
+     * @return combineddictionary
      */
     public Hashtable<String, String> getCombinedDictionary(){
         return this.combinedDictionary;
     }
 
-    // Loads words from the Dictionary text file to the Dictionary hashtable
+    /**
+     * This method loads the dictionary with the reference dictionary from github and returns it loaded with words
+     * @return dictionary with words
+     */
     public Hashtable<String, String> loadDictionary() {
-        this.dictionary.clear();
+        this.dictionary.clear();//clears the dictionary
 
         try {
-            File githubFile = new File("./SpellChecker/words_alpha.txt");
-            Scanner fileScan = new Scanner(githubFile);
+            File githubFile = new File("./SpellChecker/words_alpha.txt");//opens reference dictionary from github
+            Scanner fileScan = new Scanner(githubFile);//file scanner object
 
-            while (fileScan.hasNextLine()) {
-                String dictWord = fileScan.nextLine();
-                this.dictionary.put(dictWord, dictWord);
+            while (fileScan.hasNextLine()) {//scans each line of the file
+                String dictWord = fileScan.nextLine();//store word of each line
+                this.dictionary.put(dictWord, dictWord);//put word into the dictionary
             }
-            fileScan.close();
+            fileScan.close();//close the file scan
         } 
         catch (Exception e) { 
-            System.out.println("Error, could not open the file");
+            System.out.println("Error, could not open the file");//if file cannot be opened
         }
-        setDictionary(this.dictionary);
+        setDictionary(this.dictionary);//sets dictionary of this class to be that with the newly loaded words
         
-        return this.dictionary;
+        return this.dictionary;//returns the dictionary
     }
 
-    // Combines userDictionary and Dictionary into combinedDictionary hashtable
+    /**
+     * This method combines the user dict and test dict together to create one dictionary
+     * @param none
+     * @return void
+     */
     public void combineDictionary() {
-        this.combinedDictionary.clear();
+        this.combinedDictionary.clear();//clears the combined dictionary
 
-        this.userDictionary = getUserDictionary();
+        this.userDictionary = getUserDictionary();//get the user dict and store it in var
         
         // Combine userDictionary and dictionary into one hashtable
         this.combinedDictionary.putAll(dictionary);
@@ -86,17 +93,28 @@ public class Dictionary extends userDictionary{
                 combinedDictionary.put(key, value);
             } 
         }
-        setDictionary(this.combinedDictionary);
-        setUserDictionary(this.userDictionary);
+        setDictionary(this.combinedDictionary);//sets combined dict as new dictionary
+        setUserDictionary(this.userDictionary);//sets the user dict as the userdictionary
     }
     
-    //removes word from userDictionary if dictionary contains word
+    /**
+     * This method takes in the param of a word and removes it from the dictionary and returns nothing
+     * @param word
+     * @return void
+     */
     public void removeWordDictionary(String word) {
-        if(this.dictionary.containsKey(word)){
-            this.dictionary.remove(word, word);
+        if(this.dictionary.containsKey(word)){//if the dict has the word
+            this.dictionary.remove(word, word);//removes word from the dict
         }
     }
     
+    /**
+     * Helper function for testing that takes in two hash tables and compares them and returns true if they are equal 
+     * and false if they are false
+     * @param a
+     * @param b
+     * @return true or false
+     */
     public boolean assertEquals(Hashtable<String, String> a, Hashtable<String, String> b){
         if(a.equals(b)){
             return true;
