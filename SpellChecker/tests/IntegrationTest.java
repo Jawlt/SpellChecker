@@ -1,7 +1,7 @@
 /**
  * This class is used for Integration testing of the program. Specifically, this testing focuses on the smooth flow between the created
  * classes and their respective functions, making sure the program inherits changes correctly
- * @author Ojas Hunjan
+ * 
  */
 
 import org.junit.jupiter.api.Test;//import unit tests

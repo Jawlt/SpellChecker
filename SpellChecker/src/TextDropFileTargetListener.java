@@ -1,6 +1,6 @@
 /**
  * This class converts dropable .txt file into text to display onto textpane in GUI
- * @author Lance Cheong Youne, Jwalant Patel
+ * 
  */
 
 import java.util.List;

@@ -1,6 +1,6 @@
 /**
  * This class runs the code and displays the GUI
- * @author Jawalant Patel, Lance Cheong Youne
+ * 
  */
 
 /*

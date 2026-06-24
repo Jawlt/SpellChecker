@@ -1,7 +1,7 @@
 /**
  * This class utlizied J-Unit testing in order to test individual aspects of the program related to making sure the various spell checking 
  * methods work and provide the right correction.
- * @author Khathab Abdulbaset Hamed, Jwalant Patel
+ * 
  */
 import org.junit.Before;
 import org.junit.Test;

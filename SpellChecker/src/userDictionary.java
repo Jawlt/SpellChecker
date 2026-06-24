@@ -1,6 +1,6 @@
 /**
  * This class runs the code and displays the GUI
- * @author Ojas Hunjan, Jawalant Patel, Lance Cheong Youne
+ * 
  */
 
 // Imports needed
