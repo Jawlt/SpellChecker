@@ -3,6 +3,31 @@
  * @author Jawalant Patel, Lance Cheong Youne
  */
 
+/*
+ * Todo List:
+ * Bugs
+ *  - Open/Save file: app crashes if user clicks "Cancel" in the file dialog
+ *    (file path comes back null and isn't checked).
+ *  - Highlighting a word can accidentally match part of a longer word
+ *    (e.g. highlights "cat" inside "category").
+ *  - updateMetrics() has a leftover line that can crash on empty lines
+ *    in the document
+ *  - If a file has no spelling errors, the app can crash instead of
+ *    showing "no errors found".
+ * 
+ * UX / Text
+ *  - Typo: "Subsitution: " in findNextError() should be "Substitution: " for consistency.
+ *  - Metrics label bug: "Manually Corrected Words (Capitalize): " should say "(Manual)".
+ *  - Reset button doesn't prompt to save unsaved changes (Exit does).
+ *  - File I/O errors only go to ex.printStackTrace() - no user-facing error dialog.
+ *  - save() always appends ".txt" - can produce "file.txt.txt" if user types an extension.
+ *
+ * Code / Desgin
+ *  - duplicates ~80 lines of near-identical setup between Open File and
+ *    Spell Check - extract into a shared helper method.
+ *  - Hardcoded pixel bounds + frame.setLayout(null) throughout - not resizable/responsive
+ */
+
 // Imports needed
 import java.awt.Color;
 import java.awt.dnd.DropTarget;
